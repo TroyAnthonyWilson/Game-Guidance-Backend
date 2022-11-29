@@ -9,6 +9,7 @@ using System;
 using System.Text;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GameGuidanceAPI.Controllers
 {
@@ -96,6 +97,7 @@ namespace GameGuidanceAPI.Controllers
             return jwtTokenHandler.WriteToken(token);
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<User>> GetAllUsers()
         {
