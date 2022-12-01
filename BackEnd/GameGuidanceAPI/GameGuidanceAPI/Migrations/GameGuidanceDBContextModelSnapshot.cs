@@ -42,6 +42,23 @@ namespace GameGuidanceAPI.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<string[]>("Platforms")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Age")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("int");
+
+                    b.Property<string[]>("Languages")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string[]>("FavoriteGames")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string[]>("IgnoredGames")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("users", (string)null);
