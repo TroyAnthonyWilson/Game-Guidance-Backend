@@ -1,16 +1,14 @@
 ﻿using GameGuidanceAPI.Context;
+using GameGuidanceAPI.DTO;
 using GameGuidanceAPI.Helpers;
 using GameGuidanceAPI.Models;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.IdentityModel.Tokens.Jwt;
-using System;
-using System.Text;
-using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authorization;
-using GameGuidanceAPI.DTO;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace GameGuidanceAPI.Controllers
 {
@@ -53,19 +51,23 @@ namespace GameGuidanceAPI.Controllers
 
 
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterUser([FromBody] User userObj)
+        public async Task<IActionResult> RegisterUser([FromBody] UserLoginSignup userObj)
         {
-            if(userObj == null)
+            User newUser = new User{
+                newUser.UserName = userObj.UserName,
+                newUser.Password = userObj.Password,
+            };
+            if(newUser == null)
                 return BadRequest();
 
-            if(await CheckUserNameExistAsync(userObj.UserName))
+            if(await CheckUserNameExistAsync(newUser.UserName))
                 return BadRequest(new { message = "Username Already Exists!" });
 
 
 
-            userObj.Password = PasswordHasher.HashPassword(userObj.Password);
-            userObj.Token = "";
-            await _authContext.Users.AddAsync(userObj);
+            newUser.Password = PasswordHasher.HashPassword(userObj.Password);
+            newUser.Token = "";
+            await _authContext.Users.AddAsync(newUser);
             await _authContext.SaveChangesAsync();
             return Ok(new { Message = "User Registered" });
         }
@@ -98,6 +100,8 @@ namespace GameGuidanceAPI.Controllers
             return jwtTokenHandler.WriteToken(token);
         }
 
+
+        //code for testing
         //[Authorize]
         //[HttpGet]
         //public async Task<ActionResult<User>> GetAllUsers()
@@ -107,10 +111,16 @@ namespace GameGuidanceAPI.Controllers
 
         [Authorize]
         [HttpPost("UserData")]
-        public async Task<IActionResult> UserData([FromBody] Token token)
+        public async Task<IActionResult> UserData()
         {
-            User user = _authContext.Users.Where(u => u.Token == token.userToken).FirstOrDefault();
-            return Ok(user.Id);
+            var authHeader = Request.Headers["Authorization"];
+            var tokenString = authHeader.ToString().Split(" ")[1];
+            User user = _authContext.Users.Where(u => u.Token == tokenString).FirstOrDefault();
+            if(user == null)
+            {
+                return NotFound();
+            }
+            return Ok(new { Message = user.UserName });
         }
     }
 }
