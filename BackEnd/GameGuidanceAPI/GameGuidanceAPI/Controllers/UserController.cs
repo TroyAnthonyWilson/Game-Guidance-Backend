@@ -1,5 +1,4 @@
 ﻿using GameGuidanceAPI.Context;
-using GameGuidanceAPI.DTO;
 using GameGuidanceAPI.Helpers;
 using GameGuidanceAPI.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -24,7 +23,7 @@ namespace GameGuidanceAPI.Controllers
 
 
         [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate([FromBody] UserLoginSignup userObj)
+        public async Task<IActionResult> Authenticate([FromBody] User userObj)
         {
 
             if(userObj == null)
