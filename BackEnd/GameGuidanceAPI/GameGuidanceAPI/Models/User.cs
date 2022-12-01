@@ -20,10 +20,9 @@ namespace GameGuidanceAPI.Models
         public string? Token { get; set; }
 
         //public string[]? Platforms { get; set; }
-
         //[Required]
         //[MaxLength(3)]
-        //public int Age { get; set; }
+        //public int? Age { get; set; }
         //public string[]? Languages { get; set; }
         //public string[]? FavoriteGames { get; set; }
         //public string[]? IgnoredGames { get; set; }
