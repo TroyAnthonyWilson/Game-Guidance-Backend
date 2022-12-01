@@ -10,6 +10,7 @@ using System.Text;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
+using GameGuidanceAPI.DTO;
 
 namespace GameGuidanceAPI.Controllers
 {
@@ -106,9 +107,9 @@ namespace GameGuidanceAPI.Controllers
 
         [Authorize]
         [HttpPost("UserData")]
-        public async Task<IActionResult> UserData(string token)
+        public async Task<IActionResult> UserData([FromBody] Token token)
         {
-            User user = _authContext.Users.Where(u => u.Token == token).FirstOrDefault();
+            User user = _authContext.Users.Where(u => u.Token == token.userToken).FirstOrDefault();
             return Ok(user.Id);
         }
     }
