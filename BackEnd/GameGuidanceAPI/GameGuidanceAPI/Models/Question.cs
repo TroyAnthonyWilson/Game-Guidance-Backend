@@ -14,9 +14,9 @@ namespace GameGuidanceAPI.Models
         public bool FirstPerson { get; set; }
         public bool ThirdPerson { get; set; }
         public double? MinimumRating { get; set; }
-        public string? Genre { get; set; }
-        public string[]? Theme { get; set; }
-        public string[]? Keywords { get; set; }
-        public List<string>? Parameters { get; set; }
+        public string[] Genres { get; set; }
+        public string[] Themes { get; set; }
+        public string[] Keywords { get; set; }
+        public List<string> Parameters { get; set; }
     }
 }
