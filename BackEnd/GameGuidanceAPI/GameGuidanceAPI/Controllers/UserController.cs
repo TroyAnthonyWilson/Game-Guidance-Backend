@@ -24,7 +24,7 @@ namespace GameGuidanceAPI.Controllers
 
 
         [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate([FromBody] User userObj)
+        public async Task<IActionResult> Authenticate([FromBody] UserLoginSignup userObj)
         {
 
             if(userObj == null)
@@ -42,6 +42,7 @@ namespace GameGuidanceAPI.Controllers
 
             user.Token = CreateJwt(user);
             await _authContext.SaveChangesAsync();
+
             return Ok(new
             {
                 Token = user.Token,
@@ -51,23 +52,17 @@ namespace GameGuidanceAPI.Controllers
 
 
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterUser([FromBody] UserLoginSignup userObj)
+        public async Task<IActionResult> RegisterUser([FromBody] User userObj)
         {
-            User newUser = new User{
-                newUser.UserName = userObj.UserName,
-                newUser.Password = userObj.Password,
-            };
-            if(newUser == null)
+            if(userObj == null)
                 return BadRequest();
 
-            if(await CheckUserNameExistAsync(newUser.UserName))
+            if(await CheckUserNameExistAsync(userObj.UserName))
                 return BadRequest(new { message = "Username Already Exists!" });
 
-
-
-            newUser.Password = PasswordHasher.HashPassword(userObj.Password);
-            newUser.Token = "";
-            await _authContext.Users.AddAsync(newUser);
+            userObj.Password = PasswordHasher.HashPassword(userObj.Password);
+            userObj.Token = "";
+            await _authContext.Users.AddAsync(userObj);
             await _authContext.SaveChangesAsync();
             return Ok(new { Message = "User Registered" });
         }
