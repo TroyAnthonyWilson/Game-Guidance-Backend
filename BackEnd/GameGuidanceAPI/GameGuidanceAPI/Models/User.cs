@@ -16,6 +16,7 @@ namespace GameGuidanceAPI.Models
         [MaxLength(60)]
         public string Password { get; set; }
 
+        [MaxLength(400)]
         public string? Token { get; set; }
 
         public string[]? Platforms { get; set; }
