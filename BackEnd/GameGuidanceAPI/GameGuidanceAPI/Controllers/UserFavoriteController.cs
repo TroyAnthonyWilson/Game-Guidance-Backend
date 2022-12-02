@@ -97,7 +97,7 @@ namespace GameGuidanceAPI.Controllers
             request.AddHeader("Client-ID", clientId);
             request.AddHeader("Authorization", bearer);
             request.AddHeader("Content-Type", "text/plain");
-            var body = $"fields *;where slug = {name};";
+            var body = $"fields name;search \"{name}\";";
             request.AddParameter("text/plain", body, ParameterType.RequestBody);
             RestResponse response = client.Execute(request);
 
@@ -111,7 +111,7 @@ namespace GameGuidanceAPI.Controllers
 
 
 
-            return Ok();
+            return Ok(response.Content);
         }
     }
 }
