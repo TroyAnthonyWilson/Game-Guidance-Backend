@@ -56,14 +56,13 @@ namespace GameGuidanceAPI.Controllers
                 GameId = myDeserializedClass[0].id.Value
             };
 
-            if(await CheckUserAlreadyFavoritedAsync(userFavorite.UserId, userFavorite.GameId))
-                return BadRequest(new { message = "Favorite Already Exists!" });
+            //if(await CheckUserAlreadyFavoritedAsync(userFavorite.UserId, userFavorite.GameId))
+            //    return BadRequest(new { message = "Favorite Already Exists!" });
 
             await _authContext.UserFavorites.AddAsync(userFavorite);
             await _authContext.SaveChangesAsync();
 
             return Ok(GameId);
-
         }
 
         private async Task<bool> CheckUserAlreadyFavoritedAsync(int userId, int gameId)
