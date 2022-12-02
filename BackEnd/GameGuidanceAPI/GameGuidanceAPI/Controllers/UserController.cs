@@ -109,7 +109,7 @@ namespace GameGuidanceAPI.Controllers
         {
             var authHeader = Request.Headers["Authorization"];
             var tokenString = authHeader.ToString().Split(" ")[1];
-            User user = _authContext.Users.Where(u => u.Token == tokenString).FirstOrDefault();
+            User user = await _authContext.Users.FirstOrDefaultAsync(u => u.Token == tokenString);
             if(user == null)
             {
                 return NotFound();
