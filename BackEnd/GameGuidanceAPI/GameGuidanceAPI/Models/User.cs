@@ -16,7 +16,16 @@ namespace GameGuidanceAPI.Models
         [MaxLength(60)]
         public string Password { get; set; }
 
+        [MaxLength(400)]
         public string? Token { get; set; }
+
+        
+
+        //public int? Age { get; set; }
+        //public string[]? Platforms { get; set; }
+        //public string[]? Languages { get; set; }
+        //public string[]? FavoriteGames { get; set; }
+        //public string[]? IgnoredGames { get; set; }
 
     }
 }
