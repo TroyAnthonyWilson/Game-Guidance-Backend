@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace GameGuidanceAPI.Migrations
+namespace GameGuidanceAPI.Migrations.GameDb
 {
-    [DbContext(typeof(GameGuidanceDBContext))]
-    partial class GameGuidanceDBContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(GameDbContext))]
+    partial class GameDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace GameGuidanceAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("GameGuidanceAPI.Models.User", b =>
+            modelBuilder.Entity("GameGuidanceAPI.Models.Game.GameMode", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -29,22 +29,13 @@ namespace GameGuidanceAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Password")
+                    b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
-
-                    b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("users", (string)null);
+                    b.ToTable("gameModes", (string)null);
                 });
 #pragma warning restore 612, 618
         }
