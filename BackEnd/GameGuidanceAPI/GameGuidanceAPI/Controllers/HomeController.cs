@@ -4,6 +4,7 @@ using GameGuidanceAPI.Models;
 using RestSharp;
 using GameGuidanceAPI.Helpers;
 
+
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GameGuidanceAPI.Controllers
@@ -33,23 +34,21 @@ namespace GameGuidanceAPI.Controllers
             return response.Content;
         }
 
-        // POST Request to return recommended game
         // POST api/<HomeController>
-
-        [HttpPost("Recommend")]
-        public string PostRecommend([FromBody] string value)
+        [HttpPost("GameModes")]
+        public string PostGameModes([FromBody] string value)
         {
-            var client = new RestClient("https://api.igdb.com/v4/games");
-            RestClientOptions options = new RestClientOptions("https://api.igdb.com/v4/games")
+            var client = new RestClient("https://api.igdb.com/v4/game_modes");
+            RestClientOptions options = new RestClientOptions("https://api.igdb.com/v4/game_modes")
             {
                 ThrowOnAnyError = true,
                 MaxTimeout = -1
             };
-            var request = new RestRequest("https://api.igdb.com/v4/games", Method.Post);
+            var request = new RestRequest("https://api.igdb.com/v4/game_modes", Method.Post);
             request.AddHeader("Client-ID", "n9kcwb4ynvskjy7bd147jk94tdt6yw");
             request.AddHeader("Authorization", "Bearer 1w3wtuaj6g10l2zttajubqwveonvtf");
             request.AddHeader("Content-Type", "text/plain");
-            var body = @$"{Variables.CreateRequest()}";
+            var body = @"fields name; limit 500; ";
             request.AddParameter("text/plain", body, ParameterType.RequestBody);
             RestResponse response = client.Execute(request);
             return response.Content;
