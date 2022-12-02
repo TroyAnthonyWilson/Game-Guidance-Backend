@@ -2,6 +2,7 @@
 using GameGuidanceAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -23,7 +24,7 @@ namespace GameGuidanceAPI.Controllers
 
         // POST api/<HomeController>
         [HttpPost("addfavorite")]
-        public async Task<IActionResult> Post(int gameId)
+        public async Task<IActionResult> Post(int GameId)
         {
             var authHeader = Request.Headers["Authorization"];
             var tokenString = authHeader.ToString().Split(" ")[1];
@@ -43,7 +44,7 @@ namespace GameGuidanceAPI.Controllers
             request.AddHeader("Authorization", bearer);
             request.AddHeader("Content-Type", "text/plain");
             //request.AddHeader("Cookie", "__cf_bm=tArho0gINIfLmN3bLfKD9VmJJXO_zA0icrIpJZwzsdE-1669564263-0-AeA4CPYMcXk+VQzXR0z36LHOrx7xkYr8hr49f/zZZ6EaAcL7B2S7ufy5ixCu/2kMQOqyzps9Vmqx9Y+kWCWKPL0=");
-            var body = $"fields *;where id = 40104;";
+            var body = $"fields *;where id = 85450;";
             request.AddParameter("text/plain", body, ParameterType.RequestBody);
             RestResponse response = client.Execute(request);
 
@@ -55,11 +56,17 @@ namespace GameGuidanceAPI.Controllers
                 GameId = myDeserializedClass[0].id.Value
             };
 
+            if(await CheckUserAlreadyFavoritedAsync(userFavorite.UserId, userFavorite.GameId))
+                return BadRequest(new { message = "Favorite Already Exists!" });
+
             await _authContext.UserFavorites.AddAsync(userFavorite);
             await _authContext.SaveChangesAsync();
 
-            return Ok(response);
+            return Ok(GameId);
 
         }
+
+        private async Task<bool> CheckUserAlreadyFavoritedAsync(int userId, int gameId)
+           => await _authContext.UserFavorites.AnyAsync(x => x.UserId == userId && x.GameId == gameId);
     }
 }
