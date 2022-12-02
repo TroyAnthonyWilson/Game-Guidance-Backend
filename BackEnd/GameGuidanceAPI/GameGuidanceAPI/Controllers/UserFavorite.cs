@@ -35,12 +35,6 @@ namespace GameGuidanceAPI.Controllers
 
             List<JsonDeserializer> myDeserializedClass = JsonConvert.DeserializeObject<List<JsonDeserializer>>(response.Content);
 
-            // add all ids to a list
-            //foreach(var item in myDeserializedClass)
-            //{
-            //    return JsonConvert.SerializeObject(item);
-            //}
-
             return JsonConvert.SerializeObject(myDeserializedClass);
 
         }
