@@ -60,7 +60,7 @@ namespace GameGuidanceAPI.Controllers
             List<GenreJsonDeserializer> DeserializedGenres = JsonConvert.DeserializeObject<List<GenreJsonDeserializer>>(response.Content);
             foreach (GenreJsonDeserializer g in DeserializedGenres)
             {
-                Genre gr = new() { Name = g.Name };
+                Genre gr = new() {ApiId = g.Id, Name = g.Name };
                 await _authContext.Genres.AddAsync(gr);
                 await _authContext.SaveChangesAsync();
             }

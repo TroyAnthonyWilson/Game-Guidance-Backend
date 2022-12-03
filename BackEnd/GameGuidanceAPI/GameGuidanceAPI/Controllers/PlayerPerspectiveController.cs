@@ -60,7 +60,7 @@ namespace GameGuidanceAPI.Controllers
             List<PlayerPerspectiveJsonDeserializer> DeserializedPlayerPerspectives = JsonConvert.DeserializeObject<List<PlayerPerspectiveJsonDeserializer>>(response.Content);
             foreach (PlayerPerspectiveJsonDeserializer p in DeserializedPlayerPerspectives)
             {
-                PlayerPerspective pl = new() { Name = p.Name };
+                PlayerPerspective pl = new() {ApiId = p.Id, Name = p.Name };
                 await _authContext.PlayerPerspectives.AddAsync(pl);
                 await _authContext.SaveChangesAsync();
             }

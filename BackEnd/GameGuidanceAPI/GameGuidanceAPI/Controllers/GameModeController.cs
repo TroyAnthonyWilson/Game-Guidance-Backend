@@ -62,7 +62,7 @@ namespace GameGuidanceAPI.Controllers
             List<GameModeJsonDeserializer> DeserializedGameModes = JsonConvert.DeserializeObject<List<GameModeJsonDeserializer>>(response.Content);
             foreach (GameModeJsonDeserializer g in DeserializedGameModes)
             {
-                GameMode gm = new() {Name = g.Name};
+                GameMode gm = new() {ApiId = g.Id, Name = g.Name};
                 await _authContext.GameModes.AddAsync(gm);
                 await _authContext.SaveChangesAsync();
             }

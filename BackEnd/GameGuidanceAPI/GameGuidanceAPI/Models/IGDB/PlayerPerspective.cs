@@ -6,6 +6,7 @@ namespace GameGuidanceAPI.Models.IGDB
     {
         [Key]
         public int? Id { get; set; }
+        public int? ApiId { get; set; }
         public string? Name { get; set; }
     }
 }

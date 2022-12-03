@@ -60,7 +60,7 @@ namespace GameGuidanceAPI.Controllers
             List<ThemeJsonDeserializer> DeserializedThemes = JsonConvert.DeserializeObject<List<ThemeJsonDeserializer>>(response.Content);
             foreach (ThemeJsonDeserializer g in DeserializedThemes)
             {
-                Theme gr = new() { Name = g.Name };
+                Theme gr = new() {ApiId = g.Id, Name = g.Name };
                 await _authContext.Themes.AddAsync(gr);
                 await _authContext.SaveChangesAsync();
             }
