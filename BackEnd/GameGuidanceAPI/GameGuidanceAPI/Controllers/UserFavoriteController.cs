@@ -56,7 +56,7 @@ namespace GameGuidanceAPI.Controllers
             };
 
             if(await CheckUserAlreadyFavoritedAsync(userFavorite.UserId, userFavorite.GameId))
-                return BadRequest(new { message = "Favorite Already Exists!" });
+                return Ok(new { message = "Favorite Already Exists!" });
 
             await _authContext.UserFavorites.AddAsync(userFavorite);
             await _authContext.SaveChangesAsync();
