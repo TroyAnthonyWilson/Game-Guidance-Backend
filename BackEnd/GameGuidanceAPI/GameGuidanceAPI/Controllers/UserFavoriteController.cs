@@ -88,7 +88,7 @@ namespace GameGuidanceAPI.Controllers
             request.AddHeader("Client-ID", clientId);
             request.AddHeader("Authorization", bearer);
             request.AddHeader("Content-Type", "text/plain");
-            var body = $"fields name;search \"{search}\";";
+            var body = $"fields *;search \"{search}\";limit 50;";
             request.AddParameter("text/plain", body, ParameterType.RequestBody);
             RestResponse response = client.Execute(request);
 
