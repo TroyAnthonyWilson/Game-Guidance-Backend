@@ -22,11 +22,6 @@ builder.Services.AddDbContext<GameGuidanceDBContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("sqlServerConnStr"));
 });
 
-builder.Services.AddDbContext<GameDbContext>(option =>
-{
-    option.UseSqlServer(builder.Configuration.GetConnectionString("sqlServerConnStrG"));
-});
-
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
