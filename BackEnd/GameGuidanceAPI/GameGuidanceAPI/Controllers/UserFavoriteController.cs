@@ -22,7 +22,6 @@ namespace GameGuidanceAPI.Controllers
             _authContext = gameGuidanceDBContext;
         }
 
-        // POST api/<HomeController>
         [HttpPost("addfavorite")]
         public async Task<IActionResult> Post(int gameId)
         {
@@ -75,18 +74,10 @@ namespace GameGuidanceAPI.Controllers
 
 
 
-        // POST api/<HomeController>
-        [HttpPost("search")]
-        public async Task<IActionResult> Post(string name)
+        [HttpGet("search")]
+        public async Task<IActionResult> Get(string search)
         {
-            //var authHeader = Request.Headers["Authorization"];
-            //var tokenString = authHeader.ToString().Split(" ")[1];
-            //User user = _authContext.Users.Where(u => u.Token == tokenString).FirstOrDefault();
-            //if(user == null)
-            //{
-            //    return NotFound();
-            //}
-
+   
             var client = new RestClient("https://api.igdb.com/v4/games");
             RestClientOptions options = new RestClientOptions("https://api.igdb.com/v4/games")
             {
@@ -97,19 +88,9 @@ namespace GameGuidanceAPI.Controllers
             request.AddHeader("Client-ID", clientId);
             request.AddHeader("Authorization", bearer);
             request.AddHeader("Content-Type", "text/plain");
-            var body = $"fields name;search \"{name}\";";
+            var body = $"fields name;search \"{search}\";";
             request.AddParameter("text/plain", body, ParameterType.RequestBody);
             RestResponse response = client.Execute(request);
-
-
-            List<JsonDeserializer> myDeserializedClass = JsonConvert.DeserializeObject<List<JsonDeserializer>>(response.Content);
-
-            //UserFavorite userFavorite = new UserFavorite
-            //{
-            //    GameId = myDeserializedClass[0].id.Value
-            //};
-
-
 
             return Ok(response.Content);
         }
