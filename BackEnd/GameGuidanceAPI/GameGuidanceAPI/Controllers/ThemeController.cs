@@ -10,28 +10,28 @@ namespace GameGuidanceAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GenreController : ControllerBase
+    public class ThemeController : ControllerBase
     {
         private readonly GameGuidanceDBContext _authContext;
         private string clientId = Helpers.IgdbTokens.getClientID();
         private string bearer = Helpers.IgdbTokens.getBearer();
 
-        public GenreController(GameGuidanceDBContext gameGuidanceDBContext)
+        public ThemeController(GameGuidanceDBContext gameGuidanceDBContext)
         {
             _authContext = gameGuidanceDBContext;
         }
 
-        // POST api/<GenreController>
-        [HttpPost("Genres")]
-        public string PostGenres([FromBody] string value)
+        // POST api/<ThemeController>
+        [HttpPost("Themes")]
+        public string PostThemes([FromBody] string value)
         {
-            var client = new RestClient("https://api.igdb.com/v4/genres");
-            RestClientOptions options = new RestClientOptions("https://api.igdb.com/v4/genres")
+            var client = new RestClient("https://api.igdb.com/v4/themes");
+            RestClientOptions options = new RestClientOptions("https://api.igdb.com/v4/themes")
             {
                 ThrowOnAnyError = true,
                 MaxTimeout = -1
             };
-            var request = new RestRequest("https://api.igdb.com/v4/genres", Method.Post);
+            var request = new RestRequest("https://api.igdb.com/v4/themes", Method.Post);
             request.AddHeader("Client-ID", "n9kcwb4ynvskjy7bd147jk94tdt6yw");
             request.AddHeader("Authorization", "Bearer 1w3wtuaj6g10l2zttajubqwveonvtf");
             request.AddHeader("Content-Type", "text/plain");
@@ -41,36 +41,36 @@ namespace GameGuidanceAPI.Controllers
             return response.Content;
         }
 
-        [HttpPost("AddGenres")]
-        public async Task<IActionResult> AddGenres([FromBody] string value)
+        [HttpPost("AddThemes")]
+        public async Task<IActionResult> AddThemes([FromBody] string value)
         {
-            var client = new RestClient("https://api.igdb.com/v4/genres");
-            RestClientOptions options = new RestClientOptions("https://api.igdb.com/v4/genres")
+            var client = new RestClient("https://api.igdb.com/v4/themes");
+            RestClientOptions options = new RestClientOptions("https://api.igdb.com/v4/themes")
             {
                 ThrowOnAnyError = true,
                 MaxTimeout = -1
             };
-            var request = new RestRequest("https://api.igdb.com/v4/genres", Method.Post);
+            var request = new RestRequest("https://api.igdb.com/v4/themes", Method.Post);
             request.AddHeader("Client-ID", "n9kcwb4ynvskjy7bd147jk94tdt6yw");
             request.AddHeader("Authorization", "Bearer 1w3wtuaj6g10l2zttajubqwveonvtf");
             request.AddHeader("Content-Type", "text/plain");
             var body = @"fields *; limit 500; ";
             request.AddParameter("text/plain", body, ParameterType.RequestBody);
             RestResponse response = client.Execute(request);
-            List<GenreJsonDeserializer> DeserializedGenres = JsonConvert.DeserializeObject<List<GenreJsonDeserializer>>(response.Content);
-            foreach (GenreJsonDeserializer g in DeserializedGenres)
+            List<ThemeJsonDeserializer> DeserializedThemes = JsonConvert.DeserializeObject<List<ThemeJsonDeserializer>>(response.Content);
+            foreach (ThemeJsonDeserializer g in DeserializedThemes)
             {
-                Genre gr = new() { Name = g.Name };
-                await _authContext.Genres.AddAsync(gr);
+                Theme gr = new() { Name = g.Name };
+                await _authContext.Themes.AddAsync(gr);
                 await _authContext.SaveChangesAsync();
             }
             return Ok(response.Content);
         }
 
-        [HttpGet("GetGenres")]
-        public async Task<ActionResult<Genre>> GetGenres()
+        [HttpGet("GetThemes")]
+        public async Task<ActionResult<Theme>> GetThemes()
         {
-            return Ok(await _authContext.Genres.ToListAsync());
+            return Ok(await _authContext.Themes.ToListAsync());
         }
     }
 }

@@ -10,28 +10,28 @@ namespace GameGuidanceAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GenreController : ControllerBase
+    public class PlayerPerspectiveController : ControllerBase
     {
         private readonly GameGuidanceDBContext _authContext;
         private string clientId = Helpers.IgdbTokens.getClientID();
         private string bearer = Helpers.IgdbTokens.getBearer();
 
-        public GenreController(GameGuidanceDBContext gameGuidanceDBContext)
+        public PlayerPerspectiveController(GameGuidanceDBContext gameGuidanceDBContext)
         {
             _authContext = gameGuidanceDBContext;
         }
 
-        // POST api/<GenreController>
-        [HttpPost("Genres")]
-        public string PostGenres([FromBody] string value)
+        // POST api/<PlayerPerspectiveController>
+        [HttpPost("PlayerPerspectives")]
+        public string PostPlayerPerspectives([FromBody] string value)
         {
-            var client = new RestClient("https://api.igdb.com/v4/genres");
-            RestClientOptions options = new RestClientOptions("https://api.igdb.com/v4/genres")
+            var client = new RestClient("https://api.igdb.com/v4/player_perspectives");
+            RestClientOptions options = new RestClientOptions("https://api.igdb.com/v4/player_perspectives")
             {
                 ThrowOnAnyError = true,
                 MaxTimeout = -1
             };
-            var request = new RestRequest("https://api.igdb.com/v4/genres", Method.Post);
+            var request = new RestRequest("https://api.igdb.com/v4/player_perspectives", Method.Post);
             request.AddHeader("Client-ID", "n9kcwb4ynvskjy7bd147jk94tdt6yw");
             request.AddHeader("Authorization", "Bearer 1w3wtuaj6g10l2zttajubqwveonvtf");
             request.AddHeader("Content-Type", "text/plain");
@@ -41,36 +41,36 @@ namespace GameGuidanceAPI.Controllers
             return response.Content;
         }
 
-        [HttpPost("AddGenres")]
-        public async Task<IActionResult> AddGenres([FromBody] string value)
+        [HttpPost("AddPlayerPerspectives")]
+        public async Task<IActionResult> AddplayerPerspectives([FromBody] string value)
         {
-            var client = new RestClient("https://api.igdb.com/v4/genres");
-            RestClientOptions options = new RestClientOptions("https://api.igdb.com/v4/genres")
+            var client = new RestClient("https://api.igdb.com/v4/player_perspectives");
+            RestClientOptions options = new RestClientOptions("https://api.igdb.com/v4/player_perspectives")
             {
                 ThrowOnAnyError = true,
                 MaxTimeout = -1
             };
-            var request = new RestRequest("https://api.igdb.com/v4/genres", Method.Post);
+            var request = new RestRequest("https://api.igdb.com/v4/player_perspectives", Method.Post);
             request.AddHeader("Client-ID", "n9kcwb4ynvskjy7bd147jk94tdt6yw");
             request.AddHeader("Authorization", "Bearer 1w3wtuaj6g10l2zttajubqwveonvtf");
             request.AddHeader("Content-Type", "text/plain");
             var body = @"fields *; limit 500; ";
             request.AddParameter("text/plain", body, ParameterType.RequestBody);
             RestResponse response = client.Execute(request);
-            List<GenreJsonDeserializer> DeserializedGenres = JsonConvert.DeserializeObject<List<GenreJsonDeserializer>>(response.Content);
-            foreach (GenreJsonDeserializer g in DeserializedGenres)
+            List<PlayerPerspectiveJsonDeserializer> DeserializedPlayerPerspectives = JsonConvert.DeserializeObject<List<PlayerPerspectiveJsonDeserializer>>(response.Content);
+            foreach (PlayerPerspectiveJsonDeserializer p in DeserializedPlayerPerspectives)
             {
-                Genre gr = new() { Name = g.Name };
-                await _authContext.Genres.AddAsync(gr);
+                PlayerPerspective pl = new() { Name = p.Name };
+                await _authContext.PlayerPerspectives.AddAsync(pl);
                 await _authContext.SaveChangesAsync();
             }
             return Ok(response.Content);
         }
 
-        [HttpGet("GetGenres")]
-        public async Task<ActionResult<Genre>> GetGenres()
+        [HttpGet("GetPlayerPerspectives")]
+        public async Task<ActionResult<PlayerPerspective>> GetPlayerPerspectives()
         {
-            return Ok(await _authContext.Genres.ToListAsync());
+            return Ok(await _authContext.PlayerPerspectives.ToListAsync());
         }
     }
 }

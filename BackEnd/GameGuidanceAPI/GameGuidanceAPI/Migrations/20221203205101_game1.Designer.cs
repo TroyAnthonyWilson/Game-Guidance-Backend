@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameGuidanceAPI.Migrations
 {
     [DbContext(typeof(GameGuidanceDBContext))]
-    [Migration("20221203174609__game1")]
+    [Migration("20221203205101_game1")]
     partial class game1
     {
         /// <inheritdoc />
@@ -55,6 +55,38 @@ namespace GameGuidanceAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("genres", (string)null);
+                });
+
+            modelBuilder.Entity("GameGuidanceAPI.Models.IGDB.PlayerPerspective", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("playerPerspectives", (string)null);
+                });
+
+            modelBuilder.Entity("GameGuidanceAPI.Models.IGDB.Theme", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("themes", (string)null);
                 });
 
             modelBuilder.Entity("GameGuidanceAPI.Models.User", b =>

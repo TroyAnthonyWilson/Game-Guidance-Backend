@@ -37,6 +37,32 @@ namespace GameGuidanceAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "playerPerspectives",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_playerPerspectives", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "themes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_themes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "user_favorites",
                 columns: table => new
                 {
@@ -74,6 +100,12 @@ namespace GameGuidanceAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "genres");
+
+            migrationBuilder.DropTable(
+                name: "playerPerspectives");
+
+            migrationBuilder.DropTable(
+                name: "themes");
 
             migrationBuilder.DropTable(
                 name: "user_favorites");
