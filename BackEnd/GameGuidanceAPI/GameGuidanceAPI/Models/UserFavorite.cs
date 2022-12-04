@@ -13,8 +13,8 @@ namespace GameGuidanceAPI.Models
 
         public int GameId { get; set; }
 
-        public virtual Game? Game { get; set; }
+        //public virtual Game? Game { get; set; }
 
-        public virtual User? User { get; set; }
+        //public virtual User? User { get; set; }
     }
 }
