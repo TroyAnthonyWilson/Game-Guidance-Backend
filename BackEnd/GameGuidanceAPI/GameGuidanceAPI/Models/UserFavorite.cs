@@ -18,7 +18,7 @@ namespace GameGuidanceAPI.Models
         [MaxLength(200)]
         public string? Name { get; set; }
 
-        [MaxLength(1000)]
+        [MaxLength(2000)]
         public string? Summary { get; set; }
 
         //public virtual Game? Game { get; set; }
