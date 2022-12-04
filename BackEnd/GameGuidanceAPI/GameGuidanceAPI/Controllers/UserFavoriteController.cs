@@ -14,8 +14,8 @@ namespace GameGuidanceAPI.Controllers
     {
 
         private readonly GameGuidanceDBContext _authContext;
-        private string clientId = Helpers.IgdbTokens.getClientID();
-        private string bearer = Helpers.IgdbTokens.getBearer();
+        private readonly string clientId = Helpers.IgdbTokens.getClientID();
+        private readonly string bearer = Helpers.IgdbTokens.getBearer();
 
         public UserFavoriteController(GameGuidanceDBContext gameGuidanceDBContext)
         {
