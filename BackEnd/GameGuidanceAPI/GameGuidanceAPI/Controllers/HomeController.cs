@@ -47,6 +47,5 @@ namespace GameGuidanceAPI.Controllers
             RestResponse response = client.Execute(request);
             return response.Content;
         }
-        [HttpPost("PostFinal")]
-    };
+    }
 }
