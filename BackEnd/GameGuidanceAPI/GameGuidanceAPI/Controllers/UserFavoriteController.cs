@@ -78,6 +78,22 @@ namespace GameGuidanceAPI.Controllers
             return BadRequest();
         }
 
+        //get user favorites
+        [HttpGet("getfavorites")]
+        public async Task<IActionResult> Get()
+        {
+            var authHeader = Request.Headers["Authorization"];
+            var tokenString = authHeader.ToString().Split(" ")[1];
+            User user = _authContext.Users.Where(u => u.Token == tokenString).FirstOrDefault();
+            if(user == null)
+            {
+                return Unauthorized();
+            }
+
+            var userFavorites = await _authContext.UserFavorites.Where(u => u.UserId == user.Id).ToListAsync();
+            return Ok(userFavorites);
+        }
+
 
 
 
