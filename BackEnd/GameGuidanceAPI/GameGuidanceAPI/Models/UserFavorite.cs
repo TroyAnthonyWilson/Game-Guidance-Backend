@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using GameGuidanceAPI.Migrations;
+using GameGuidanceAPI.Models.IGDB;
 
 namespace GameGuidanceAPI.Models
 {
@@ -8,9 +10,12 @@ namespace GameGuidanceAPI.Models
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey("User")]
         public int UserId { get; set; }
 
         public int GameId { get; set; }
+
+        public virtual Game? Game { get; set; }
+
+        public virtual User? User { get; set; }
     }
 }
