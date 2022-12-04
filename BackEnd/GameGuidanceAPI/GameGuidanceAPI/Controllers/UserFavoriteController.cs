@@ -17,11 +17,15 @@ namespace GameGuidanceAPI.Controllers
         private readonly string clientId = Helpers.IgdbTokens.getClientID();
         private readonly string bearer = Helpers.IgdbTokens.getBearer();
 
+
+        
         public UserFavoriteController(GameGuidanceDBContext gameGuidanceDBContext)
         {
             _authContext = gameGuidanceDBContext;
         }
 
+
+        
         [HttpPost("addfavorite")]
         public async Task<IActionResult> Post(int gameId)
         {
@@ -47,22 +51,31 @@ namespace GameGuidanceAPI.Controllers
             request.AddParameter("text/plain", body, ParameterType.RequestBody);
             RestResponse response = client.Execute(request);
 
-      
-            List<JsonDeserializer> myDeserializedClass = JsonConvert.DeserializeObject<List<JsonDeserializer>>(response.Content);
+            if(response.StatusCode == System.Net.HttpStatusCode.OK && response.Content != null)
+            {
+                List<JsonDeserializer> myDeserializedClass = JsonConvert.DeserializeObject<List<JsonDeserializer>>(response.Content);
 
-            UserFavorite userFavorite = new UserFavorite {
-                UserId = user.Id,
-                GameId = myDeserializedClass[0].id.Value
-            };
+                if(myDeserializedClass.Count != null)
+                {
+                  JsonDeserializer myGame = myDeserializedClass[0];
 
-            if(await CheckUserAlreadyFavoritedAsync(userFavorite.UserId, userFavorite.GameId))
-                return Ok(new { message = "Favorite Already Exists!" });
+                UserFavorite userFavorite = new UserFavorite {
+                    UserId = user.Id,
+                    GameId = myGame.id.Value,
+                    Name = myGame.name,
+                    Summary = myGame.summary,
+                };
 
-            await _authContext.UserFavorites.AddAsync(userFavorite);
+                if(await CheckUserAlreadyFavoritedAsync(userFavorite.UserId, userFavorite.GameId))
+                    return Ok(new { message = "Favorite Already Exists!" });
 
-            await _authContext.SaveChangesAsync();
+                await _authContext.UserFavorites.AddAsync(userFavorite);
+                await _authContext.SaveChangesAsync();
 
-            return Ok( user.Id);
+                    return Ok(new { Message = $"{myGame.name} added to favorites." });
+                }        
+            }
+            return BadRequest();
         }
 
 
