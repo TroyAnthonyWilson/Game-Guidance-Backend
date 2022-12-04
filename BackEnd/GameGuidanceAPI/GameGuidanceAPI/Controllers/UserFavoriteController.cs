@@ -14,17 +14,16 @@ namespace GameGuidanceAPI.Controllers
     {
 
         private readonly GameGuidanceDBContext _authContext;
-        private string clientId = Helpers.IgdbTokens.getClientID();
-        private string bearer = Helpers.IgdbTokens.getBearer();
+        private readonly string clientId = Helpers.IgdbTokens.getClientID();
+        private readonly string bearer = Helpers.IgdbTokens.getBearer();
 
         public UserFavoriteController(GameGuidanceDBContext gameGuidanceDBContext)
         {
             _authContext = gameGuidanceDBContext;
         }
 
-        // POST api/<HomeController>
         [HttpPost("addfavorite")]
-        public async Task<IActionResult> Post(int GameId)
+        public async Task<IActionResult> Post(int gameId)
         {
             var authHeader = Request.Headers["Authorization"];
             var tokenString = authHeader.ToString().Split(" ")[1];
@@ -33,6 +32,7 @@ namespace GameGuidanceAPI.Controllers
             {
                 return NotFound();
             }
+
             var client = new RestClient("https://api.igdb.com/v4/games");
             RestClientOptions options = new RestClientOptions("https://api.igdb.com/v4/games")
             {
@@ -43,8 +43,7 @@ namespace GameGuidanceAPI.Controllers
             request.AddHeader("Client-ID", clientId);
             request.AddHeader("Authorization", bearer);
             request.AddHeader("Content-Type", "text/plain");
-            //request.AddHeader("Cookie", "__cf_bm=tArho0gINIfLmN3bLfKD9VmJJXO_zA0icrIpJZwzsdE-1669564263-0-AeA4CPYMcXk+VQzXR0z36LHOrx7xkYr8hr49f/zZZ6EaAcL7B2S7ufy5ixCu/2kMQOqyzps9Vmqx9Y+kWCWKPL0=");
-            var body = $"fields *;where id = 85450;";
+            var body = $"fields *;where id = {gameId};";
             request.AddParameter("text/plain", body, ParameterType.RequestBody);
             RestResponse response = client.Execute(request);
 
@@ -56,16 +55,44 @@ namespace GameGuidanceAPI.Controllers
                 GameId = myDeserializedClass[0].id.Value
             };
 
-            //if(await CheckUserAlreadyFavoritedAsync(userFavorite.UserId, userFavorite.GameId))
-            //    return BadRequest(new { message = "Favorite Already Exists!" });
+            if(await CheckUserAlreadyFavoritedAsync(userFavorite.UserId, userFavorite.GameId))
+                return Ok(new { message = "Favorite Already Exists!" });
 
             await _authContext.UserFavorites.AddAsync(userFavorite);
             await _authContext.SaveChangesAsync();
 
-            return Ok(GameId);
+            return Ok(gameId);
         }
+
+
+
 
         private async Task<bool> CheckUserAlreadyFavoritedAsync(int userId, int gameId)
            => await _authContext.UserFavorites.AnyAsync(x => x.UserId == userId && x.GameId == gameId);
+
+
+
+
+
+        [HttpGet("search")]
+        public async Task<IActionResult> Get(string search)
+        {
+   
+            var client = new RestClient("https://api.igdb.com/v4/games");
+            RestClientOptions options = new RestClientOptions("https://api.igdb.com/v4/games")
+            {
+                ThrowOnAnyError = true,
+                MaxTimeout = -1
+            };
+            var request = new RestRequest("https://api.igdb.com/v4/games", Method.Post);
+            request.AddHeader("Client-ID", clientId);
+            request.AddHeader("Authorization", bearer);
+            request.AddHeader("Content-Type", "text/plain");
+            var body = $"fields *;search \"{search}\";limit 50;";
+            request.AddParameter("text/plain", body, ParameterType.RequestBody);
+            RestResponse response = client.Execute(request);
+
+            return Ok(response.Content);
+        }
     }
 }
