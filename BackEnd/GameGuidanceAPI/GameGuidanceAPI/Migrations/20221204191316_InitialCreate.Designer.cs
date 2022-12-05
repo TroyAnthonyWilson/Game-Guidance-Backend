@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameGuidanceAPI.Migrations
 {
     [DbContext(typeof(GameGuidanceDBContext))]
-    [Migration("20221204013632_game1")]
-    partial class game1
+    [Migration("20221204191316_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,9 @@ namespace GameGuidanceAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ApiChoiceId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ChoiceName")
                         .IsRequired()

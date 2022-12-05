@@ -22,8 +22,9 @@ namespace GameGuidanceAPI.Controllers
         }
 
         // GET: api/Question
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Question>>> GetQuestions()
+
+        [HttpGet("GetAllQuestions")]
+        public async Task<ActionResult<IEnumerable<Question>>> GetAllQuestions()
         {
             if(_context.Questions == null)
             {
@@ -31,6 +32,20 @@ namespace GameGuidanceAPI.Controllers
             }
             return await _context.Questions.ToListAsync();
         }
+
+
+        // GET: api/Question
+        [HttpGet("GetAllChoices")]
+        public async Task<ActionResult<IEnumerable<Choice>>> GetAllChoices()
+        {
+            if (_context.Choices == null)
+            {
+                return NotFound();
+            }
+            return await _context.Choices.ToListAsync();
+        }
+
+
 
         // GET: api/Question/5
         [HttpGet("{id}")]
@@ -42,7 +57,6 @@ namespace GameGuidanceAPI.Controllers
                 return NotFound();
             }
             var question = await _context.Questions.FindAsync(id);
-
 
             if(question == null)
             {
