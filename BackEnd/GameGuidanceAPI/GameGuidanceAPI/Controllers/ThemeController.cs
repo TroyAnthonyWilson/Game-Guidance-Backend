@@ -72,5 +72,20 @@ namespace GameGuidanceAPI.Controllers
         {
             return Ok(await _authContext.Themes.ToListAsync());
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTheme(int id)
+        {
+            var theme = await _authContext.Themes.FindAsync(id);
+            if (theme == null)
+            {
+                return NotFound();
+            }
+
+            _authContext.Themes.Remove(theme);
+            await _authContext.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
