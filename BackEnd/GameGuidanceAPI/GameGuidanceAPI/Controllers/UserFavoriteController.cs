@@ -118,6 +118,27 @@ namespace GameGuidanceAPI.Controllers
             return Ok(userFavorites);
         }
 
+        //update rating
+        [HttpPut("updaterating")]
+        public async Task<IActionResult> Put(int gameId, int rating)
+        {
+            var authHeader = Request.Headers["Authorization"];
+            var tokenString = authHeader.ToString().Split(" ")[1];
+            User user = _authContext.Users.Where(u => u.Token == tokenString).FirstOrDefault();
+            if(user == null)
+            {
+                return Unauthorized();
+            }
+            if(await CheckUserAlreadyFavoritedAsync(user.Id, gameId))
+            {
+                UserFavorite userFavorite = await _authContext.UserFavorites.Where(u => u.UserId == user.Id && u.GameId == gameId).FirstOrDefaultAsync();
+                userFavorite.Rating = rating;
+                await _authContext.SaveChangesAsync();
+                return Ok(new { Message = "Rating Updated!" });
+            }
+            return BadRequest();
+        }
+
 
 
 
