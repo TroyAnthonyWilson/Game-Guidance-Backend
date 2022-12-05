@@ -9,12 +9,22 @@ namespace GameGuidanceAPI.Models
         [Key]
         public int Id { get; set; }
 
+        [ForeignKey("User")]
         public int UserId { get; set; }
 
+        [Required]
         public int GameId { get; set; }
 
-        public virtual Game? Game { get; set; }
+        [MaxLength(200)]
+        public string? Name { get; set; }
 
-        public virtual User? User { get; set; }
+        [MaxLength(2000)]
+        public string? Summary { get; set; }
+
+        public int? Rating { get; set; }
+
+        //public virtual Game? Game { get; set; }
+
+        //public virtual User? User { get; set; }
     }
 }
