@@ -8,6 +8,7 @@ namespace GameGuidanceAPI.Models
     {
         [Key]
         public int Id { get; set; }
+        public int ApiChoiceId { get; set; }
         [ForeignKey("Question")]
         public int QuestionId { get; set; }
         public virtual Question? Question { get; set; }

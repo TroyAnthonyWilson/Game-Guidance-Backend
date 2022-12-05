@@ -30,6 +30,9 @@ namespace GameGuidanceAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ApiChoiceId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ChoiceName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
