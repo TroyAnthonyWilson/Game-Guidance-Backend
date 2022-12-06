@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameGuidanceAPI.Migrations
 {
     [DbContext(typeof(GameGuidanceDBContext))]
-    [Migration("20221204013632_game1")]
-    partial class game1
+    [Migration("20221204021620_game2")]
+    partial class game2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -198,10 +198,6 @@ namespace GameGuidanceAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GameId");
-
-                    b.HasIndex("UserId");
-
                     b.ToTable("userFavorites", (string)null);
                 });
 
@@ -214,25 +210,6 @@ namespace GameGuidanceAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Question");
-                });
-
-            modelBuilder.Entity("GameGuidanceAPI.Models.UserFavorite", b =>
-                {
-                    b.HasOne("GameGuidanceAPI.Models.IGDB.Game", "Game")
-                        .WithMany()
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GameGuidanceAPI.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Game");
-
-                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }
