@@ -21,8 +21,6 @@ namespace GameGuidanceAPI.Controllers
     {
 
         private readonly GameGuidanceDBContext _authContext;
-        private string clientId = Helpers.IgdbTokens.GetClientID();
-        private string bearer = Helpers.IgdbTokens.GetBearer();
 
         public AnswerController(GameGuidanceDBContext gameGuidanceDBContext)
         {
