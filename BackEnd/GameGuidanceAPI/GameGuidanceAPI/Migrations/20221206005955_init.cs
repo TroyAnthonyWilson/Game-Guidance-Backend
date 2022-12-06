@@ -5,7 +5,7 @@
 namespace GameGuidanceAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class game1 : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
