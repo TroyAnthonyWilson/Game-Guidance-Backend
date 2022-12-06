@@ -9,6 +9,7 @@ namespace GameGuidanceAPI.Models
         [Key]
         public int Id { get; set; }
 
+        [Required]
         public string? QuestionName { get; set; }
 
     }
