@@ -1,6 +1,8 @@
 ﻿using Microsoft.Identity.Client;
 using GameGuidanceAPI.Models.IGDB;
 using GameGuidanceAPI.Models;
+using GameGuidanceAPI.Context;
+using GameGuidanceAPI.Controllers;
 
 namespace GameGuidanceAPI.Helpers
 {
@@ -13,7 +15,9 @@ namespace GameGuidanceAPI.Helpers
         public List<int> userIgnoreId;
         public List<string> userPlatforms = new List<string>() {"where platforms=6", "where platforms=(34,39)", 
             "where platforms=(165,163,162,390,388)", "where platforms!=(6,34,39,165,163,162,390,388)",""};
-        
+        private GameGuidanceDBContext _authContext;
+
+
         //Method to provide correct platforms based on user input
         //public string GenerateCorrectPlatforms()
         //{
@@ -38,12 +42,12 @@ namespace GameGuidanceAPI.Helpers
         //        return userPlatforms[4];
         //    }
         //}
-        
+
         public string GenerateFinalPost()
         {
             string finalPost = $"fields *; where game_modes=({userGameMode}); where genres=({userGenre}); " +
                 $"where player_perspectives=({userPlayerPerspective}); where themes=({userTheme}); where category=(0,8,9,11); where status=0; " +
-                $"where id!=({userIgnoreId});"/*{ GenerateCorrectPlatforms()}*/;
+                $"where id!=({userIgnoreId});";
             return finalPost;
         }
     }
