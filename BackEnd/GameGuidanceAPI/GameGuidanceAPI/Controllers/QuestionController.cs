@@ -65,15 +65,8 @@ namespace GameGuidanceAPI.Controllers
 
             return question;
         }
-
-        [HttpGet("GetChoicesToQuestionId/{id}")]
-public List<Choice> GetChoicesToQuestionId(int id)
-{
-    var question = _context.Questions.Find(id);
-
-
-    return _context.Choices.Where(c => c.QuestionId == question.Id).ToList();
-}
+        return await _context.Questions.ToListAsync();
+    }
 
 
 // PUT: api/Question/5
@@ -138,11 +131,7 @@ public void AddChoicesToQuestion(int questionId, List<string> choicesList)
         _context.Choices.Add(newChoice);
         _context.SaveChanges();
     });
-
-
 }
-
-
 
 // DELETE: api/Question/5
 [HttpDelete("{id}")]

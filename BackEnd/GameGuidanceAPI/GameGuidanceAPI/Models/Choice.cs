@@ -14,5 +14,6 @@ namespace GameGuidanceAPI.Models
         public virtual Question? Question { get; set; }
 
         public string ChoiceName { get; set; }
+
     }
 }
