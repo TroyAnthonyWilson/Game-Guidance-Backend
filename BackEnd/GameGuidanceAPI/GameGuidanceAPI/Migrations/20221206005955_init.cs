@@ -5,7 +5,7 @@
 namespace GameGuidanceAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -93,6 +93,23 @@ namespace GameGuidanceAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "userFavorites",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    GameId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Summary = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    Rating = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_userFavorites", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "users",
                 columns: table => new
                 {
@@ -128,46 +145,10 @@ namespace GameGuidanceAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "userFavorites",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    GameId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_userFavorites", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_userFavorites_games_GameId",
-                        column: x => x.GameId,
-                        principalTable: "games",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_userFavorites_users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_choices_QuestionId",
                 table: "choices",
                 column: "QuestionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_userFavorites_GameId",
-                table: "userFavorites",
-                column: "GameId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_userFavorites_UserId",
-                table: "userFavorites",
-                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -178,6 +159,9 @@ namespace GameGuidanceAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "gameModes");
+
+            migrationBuilder.DropTable(
+                name: "games");
 
             migrationBuilder.DropTable(
                 name: "genres");
@@ -192,13 +176,10 @@ namespace GameGuidanceAPI.Migrations
                 name: "userFavorites");
 
             migrationBuilder.DropTable(
-                name: "questions");
-
-            migrationBuilder.DropTable(
-                name: "games");
-
-            migrationBuilder.DropTable(
                 name: "users");
+
+            migrationBuilder.DropTable(
+                name: "questions");
         }
     }
 }
