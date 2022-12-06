@@ -121,6 +121,14 @@ namespace GameGuidanceAPI.Controllers
             });
         }
 
+        [HttpGet("GetChoicesToQuestionId/{id}")]
+        public List<Choice> GetChoicesToQuestionId(int id)
+        {
+            var question = _context.Questions.Find(id);
+            return _context.Choices.Where(c => c.QuestionId == question.Id).ToList();
+        }
+
+
         // DELETE: api/Question/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteQuestion(int id)
