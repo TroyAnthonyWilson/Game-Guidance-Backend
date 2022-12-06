@@ -21,43 +21,16 @@ namespace GameGuidanceAPI.Controllers
             _context = context;
         }
 
-        // GET: api/Question
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Question>>> GetQuestions()
+    // GET: api/Question
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Question>>> GetQuestions()
+    {
+        if (_context.Questions == null)
         {
-            if (_context.Questions == null)
-            {
-                return NotFound();
-            }
-            return await _context.Questions.ToListAsync();
+            return NotFound();
         }
-
-        // GET: api/Question/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Question>> GetQuestion(int id)
-        {
-            if (_context.Questions == null)
-            {
-                return NotFound();
-            }
-            var question = await _context.Questions.FindAsync(id);
-
-            if (question == null)
-            {
-                return NotFound();
-            }
-
-            return question;
-        }
-
-        [HttpGet("GetChoicesToQuestionId/{id}")]
-public List<Choice> GetChoicesToQuestionId(int id)
-{
-    var question = _context.Questions.Find(id);
-
-
-    return _context.Choices.Where(c => c.QuestionId == question.Id).ToList();
-}
+        return await _context.Questions.ToListAsync();
+    }
 
 
 // PUT: api/Question/5
@@ -122,11 +95,7 @@ public void AddChoicesToQuestion(int questionId, List<string> choicesList)
         _context.Choices.Add(newChoice);
         _context.SaveChanges();
     });
-
-
 }
-
-
 
 // DELETE: api/Question/5
 [HttpDelete("{id}")]
