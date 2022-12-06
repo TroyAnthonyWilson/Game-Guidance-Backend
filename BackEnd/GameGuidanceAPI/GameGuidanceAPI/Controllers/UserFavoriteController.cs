@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using RestSharp;
+using GameGuidanceAPI.Helpers.Igbdtokens;
 
 namespace GameGuidanceAPI.Controllers
 {
@@ -14,8 +15,8 @@ namespace GameGuidanceAPI.Controllers
     {
 
         private readonly GameGuidanceDBContext _authContext;
-        private readonly string clientId = Helpers.IgdbTokens.getClientID();
-        private readonly string bearer = Helpers.IgdbTokens.getBearer();
+        private readonly string clientId = Helpers.IgdbTokens.GetClientID();
+        private readonly string bearer = Helpers.IgdbTokens.GetBearer();
 
 
         

@@ -13,8 +13,8 @@ namespace GameGuidanceAPI.Controllers
     public class PlayerPerspectiveController : ControllerBase
     {
         private readonly GameGuidanceDBContext _authContext;
-        private string clientId = Helpers.IgdbTokens.getClientID();
-        private string bearer = Helpers.IgdbTokens.getBearer();
+        private string clientId = Helpers.IgdbTokens.GetClientID();
+        private string bearer = Helpers.IgdbTokens.GetBearer();
 
         public PlayerPerspectiveController(GameGuidanceDBContext gameGuidanceDBContext)
         {
