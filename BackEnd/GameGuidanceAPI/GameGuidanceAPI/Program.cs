@@ -19,7 +19,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<GameGuidanceDBContext>(option =>
 {
-    option.UseSqlServer(builder.Configuration.GetConnectionString("sqlServerConnStr"));
+    option.UseSqlServer(builder.Configuration.GetConnectionString("AzureConnection"));
 });
 
 builder.Services.AddCors(options =>
