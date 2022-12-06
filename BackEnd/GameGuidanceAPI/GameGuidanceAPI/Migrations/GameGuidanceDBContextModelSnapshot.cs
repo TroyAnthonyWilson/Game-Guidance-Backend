@@ -22,6 +22,34 @@ namespace GameGuidanceAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("GameGuidanceAPI.Models.Answer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("GameMode")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Genre")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Platform")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlayerPerspective")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Theme")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("answers", (string)null);
+                });
+
             modelBuilder.Entity("GameGuidanceAPI.Models.Choice", b =>
                 {
                     b.Property<int>("Id")

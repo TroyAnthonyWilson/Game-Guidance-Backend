@@ -5,11 +5,28 @@
 namespace GameGuidanceAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class game1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "answers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Platform = table.Column<int>(type: "int", nullable: false),
+                    GameMode = table.Column<int>(type: "int", nullable: false),
+                    PlayerPerspective = table.Column<int>(type: "int", nullable: false),
+                    Genre = table.Column<int>(type: "int", nullable: false),
+                    Theme = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_answers", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "gameModes",
                 columns: table => new
@@ -154,6 +171,9 @@ namespace GameGuidanceAPI.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "answers");
+
             migrationBuilder.DropTable(
                 name: "choices");
 
