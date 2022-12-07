@@ -28,15 +28,15 @@ namespace GameGuidanceAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Answer>> PostAnswer(int platform, int gameMode, int playerPerpective, int genre, int theme)
+        public async Task<ActionResult<Answer>> PostAnswer([FromBody] Answer answerObj)
         {
             var newAnswer = new Answer
             {
-                Platform = platform,
-                GameMode = gameMode,
-                PlayerPerspective = playerPerpective,
-                Genre = genre,
-                Theme = theme,
+                Platform = answerObj.Platform,
+                GameMode = answerObj.GameMode,
+                PlayerPerspective = answerObj.PlayerPerspective,
+                Genre = answerObj.Genre,
+                Theme = answerObj.Theme,
             };
             _authContext.Answers.Add(newAnswer);
             await _authContext.SaveChangesAsync();
