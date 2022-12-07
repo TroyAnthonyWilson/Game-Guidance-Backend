@@ -15,6 +15,7 @@ namespace GameGuidanceAPI.Controllers
         private readonly string bearer = Helpers.IgdbTokens.GetBearer();
 
 
+        
         [HttpGet("search")]
         public async Task<IActionResult> Get(string search)
         {
