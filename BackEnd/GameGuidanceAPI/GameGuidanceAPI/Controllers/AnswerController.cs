@@ -1,14 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Models;
+﻿using GameGuidanceAPI.Context;
 using GameGuidanceAPI.Models;
-using RestSharp;
-using GameGuidanceAPI.Helpers;
-using GameGuidanceAPI.Context;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Net.Sockets;
-using GameGuidanceAPI.Models.IGDB;
+using RestSharp;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -54,21 +48,50 @@ namespace GameGuidanceAPI.Controllers
                 MaxTimeout = -1
             };
             var request = new RestRequest("https://api.igdb.com/v4/games", Method.Post);
+
+            Console.WriteLine(answer);
+            List<string> bodybuild = new();
+            // if answer proporty is null then set it to 0
+            if (answer.Platform != null)
+            {
+                bodybuild.Add($" platforms = ({answer.Platform}) ");
+            }
+            if (answer.GameMode != null)
+            {
+                bodybuild.Add($" game_modes = ({answer.GameMode}) ");
+            }
+            if (answer.PlayerPerspective != null)
+            {
+                bodybuild.Add($" player_perspectives=({answer.PlayerPerspective}) ");
+            }
+            if (answer.Genre != null)
+            {
+                bodybuild.Add($" genres=({answer.Genre}) ");
+            }
+            if (answer.Theme != null)
+            {
+                bodybuild.Add($" themes=({answer.Theme}) ");
+            }
+
+            var fields = string.Join(" & ", bodybuild);
+            var body = $"fields *; limit 1; where {fields} & category=(0,8,9,11); & status=0 ";
+
             request.AddHeader("Client-ID", "n9kcwb4ynvskjy7bd147jk94tdt6yw");
             request.AddHeader("Authorization", "Bearer 1w3wtuaj6g10l2zttajubqwveonvtf");
             request.AddHeader("Content-Type", "text/plain");
             request.AddHeader("Cookie", "__cf_bm=tArho0gINIfLmN3bLfKD9VmJJXO_zA0icrIpJZwzsdE-1669564263-0-AeA4CPYMcXk+VQzXR0z36LHOrx7xkYr8hr49f/zZZ6EaAcL7B2S7ufy5ixCu/2kMQOqyzps9Vmqx9Y+kWCWKPL0=");
-            var body = $"fields name; limit 1; where game_modes=({answer.GameMode}); where genres=({answer.Genre}) & " +
-                $"player_perspectives=({answer.PlayerPerspective}) & themes=({answer.Theme}) & category=(0,8,9,11); & status=0 & " +
-                $"where platforms=({answer.Platform});";
+
             request.AddParameter("text/plain", body, ParameterType.RequestBody);
             RestResponse response = client.Execute(request);
             Console.WriteLine(body);
+            //return body;
             return response.Content;
+            //return answer;
         }
-    
 
-    [HttpPost("ChangeAnswer")]
+
+
+        [HttpPost("ChangeAnswer")]
         public async Task<ActionResult<Answer>> ChangeAnswer(Answer answer)
         {
             if (!ModelState.IsValid)
