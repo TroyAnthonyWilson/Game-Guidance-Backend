@@ -50,13 +50,9 @@ namespace GameGuidanceAPI.Controllers
 
             if(response.StatusCode == System.Net.HttpStatusCode.OK && response.Content != null)
             {
-                List<JsonDeserializer> myDeserializedClass = JsonConvert.DeserializeObject<List<JsonDeserializer>>(response.Content);
+                JsonDeserializer? myGame = JsonConvert.DeserializeObject<JsonDeserializer>(response.Content);
 
-                if(myDeserializedClass.Count != null)
-                {
-                  JsonDeserializer myGame = myDeserializedClass[0];
-
-                UserFavorite userFavorite = new UserFavorite {
+                UserFavorite userFavorite = new() {
                     UserId = user.Id,
                     GameId = myGame.id.Value,
                     Name = myGame.name,
@@ -71,7 +67,6 @@ namespace GameGuidanceAPI.Controllers
 
                     return Ok(new { Message = $"{myGame.name} added to favorites." });
                 }        
-            }
             return BadRequest();
         }
 
