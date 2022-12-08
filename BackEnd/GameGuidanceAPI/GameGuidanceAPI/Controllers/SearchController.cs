@@ -10,7 +10,6 @@ namespace GameGuidanceAPI.Controllers
     public class SearchController : ControllerBase
     {
 
-        private readonly GameGuidanceDBContext _authContext;
         private readonly string clientId = Helpers.IgdbTokens.GetClientID();
         private readonly string bearer = Helpers.IgdbTokens.GetBearer();
 

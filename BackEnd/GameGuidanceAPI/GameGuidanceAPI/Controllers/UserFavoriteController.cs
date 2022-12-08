@@ -48,31 +48,32 @@ namespace GameGuidanceAPI.Controllers
             request.AddParameter("text/plain", body, ParameterType.RequestBody);
             RestResponse response = client.Execute(request);
 
-            if(response.StatusCode == System.Net.HttpStatusCode.OK && response.Content != null)
+            if (response.StatusCode == System.Net.HttpStatusCode.OK && response.Content != null)
             {
                 List<JsonDeserializer> myDeserializedClass = JsonConvert.DeserializeObject<List<JsonDeserializer>>(response.Content);
 
-                if(myDeserializedClass.Count != null)
+                if (myDeserializedClass.Count != null)
                 {
-                  JsonDeserializer myGame = myDeserializedClass[0];
+                    JsonDeserializer myGame = myDeserializedClass[0];
 
-                UserFavorite userFavorite = new UserFavorite {
-                    UserId = user.Id,
-                    GameId = myGame.id.Value,
-                    Name = myGame.name,
-                    Summary = myGame.summary,
-                };
+                    UserFavorite userFavorite = new()
+                    {
+                        UserId = user.Id,
+                        GameId = myGame.id.Value,
+                        Name = myGame.name,
+                        Summary = myGame.summary,
+                    };
 
-                if(await CheckUserAlreadyFavoritedAsync(userFavorite.UserId, userFavorite.GameId))
-                    return Ok(new { message = "Favorite Already Exists!" });
+                    if (await CheckUserAlreadyFavoritedAsync(userFavorite.UserId, userFavorite.GameId))
+                        return Ok(new { message = "Favorite Already Exists!" });
 
-                await _authContext.UserFavorites.AddAsync(userFavorite);
-                await _authContext.SaveChangesAsync();
+                    await _authContext.UserFavorites.AddAsync(userFavorite);
+                    await _authContext.SaveChangesAsync();
 
                     return Ok(new { Message = $"{myGame.name} added to favorites." });
-                }        
+                }
             }
-            return BadRequest();
+            return BadRequest(new { Message = "Something went wrong. sucker" });
         }
 
 
