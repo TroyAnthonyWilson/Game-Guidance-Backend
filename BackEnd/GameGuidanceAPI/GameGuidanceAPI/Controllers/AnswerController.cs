@@ -73,7 +73,7 @@ namespace GameGuidanceAPI.Controllers
             }
 
             var fields = string.Join(" & ", bodybuild);
-            var body = $"fields *; limit 5; where {fields} & category=(0,8,9,11); & status=0 ";
+            var body = $"fields *; limit 20; where {fields} & category=(0,8,9,11); & status=0 ";
 
             request.AddHeader("Client-ID", "n9kcwb4ynvskjy7bd147jk94tdt6yw");
             request.AddHeader("Authorization", "Bearer 1w3wtuaj6g10l2zttajubqwveonvtf");
