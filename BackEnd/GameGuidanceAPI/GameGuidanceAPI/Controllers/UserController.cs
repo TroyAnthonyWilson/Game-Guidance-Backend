@@ -107,14 +107,26 @@ namespace GameGuidanceAPI.Controllers
         [HttpPost("UserData")]
         public async Task<IActionResult> UserData()
         {
-            var authHeader = Request.Headers["Authorization"];
-            var tokenString = authHeader.ToString().Split(" ")[1];
+            //User? user = checkUser(Request.Headers["Authorization"]);
+            
+            Microsoft.Extensions.Primitives.StringValues authHeader = Request.Headers["Authorization"];
+            string tokenString = authHeader.ToString().Split(" ")[1];
+
             User? user = await _authContext.Users.FirstOrDefaultAsync(u => u.Token == tokenString);
-            if(user == null)
+
+            if (user == null)
             {
                 return Unauthorized();
             }
             return Ok(new { Message = user.UserName });
         }
+
+        //private async Task<User> checkUser(Microsoft.Extensions.Primitives.StringValues request)
+        //{
+        //    var authHeader = request;
+        //    string tokenString = authHeader.ToString().Split(" ")[1];
+
+        //    return await _authContext.Users.FirstOrDefaultAsync(u => u.Token == tokenString);
+        //}
     }
 }

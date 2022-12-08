@@ -48,26 +48,32 @@ namespace GameGuidanceAPI.Controllers
             request.AddParameter("text/plain", body, ParameterType.RequestBody);
             RestResponse response = client.Execute(request);
 
-            if(response.StatusCode == System.Net.HttpStatusCode.OK && response.Content != null)
+            if (response.StatusCode == System.Net.HttpStatusCode.OK && response.Content != null)
             {
-                JsonDeserializer? myGame = JsonConvert.DeserializeObject<JsonDeserializer>(response.Content);
+                List<JsonDeserializer> myDeserializedClass = JsonConvert.DeserializeObject<List<JsonDeserializer>>(response.Content);
 
-                UserFavorite userFavorite = new() {
-                    UserId = user.Id,
-                    GameId = myGame.id.Value,
-                    Name = myGame.name,
-                    Summary = myGame.summary,
-                };
+                if (myDeserializedClass.Count != null)
+                {
+                    JsonDeserializer myGame = myDeserializedClass[0];
 
-                if(await CheckUserAlreadyFavoritedAsync(userFavorite.UserId, userFavorite.GameId))
-                    return Ok(new { message = "Favorite Already Exists!" });
+                    UserFavorite userFavorite = new()
+                    {
+                        UserId = user.Id,
+                        GameId = myGame.id.Value,
+                        Name = myGame.name,
+                        Summary = myGame.summary,
+                    };
 
-                await _authContext.UserFavorites.AddAsync(userFavorite);
-                await _authContext.SaveChangesAsync();
+                    if (await CheckUserAlreadyFavoritedAsync(userFavorite.UserId, userFavorite.GameId))
+                        return Ok(new { message = "Favorite Already Exists!" });
+
+                    await _authContext.UserFavorites.AddAsync(userFavorite);
+                    await _authContext.SaveChangesAsync();
 
                     return Ok(new { Message = $"{myGame.name} added to favorites." });
-                }        
-            return BadRequest();
+                }
+            }
+            return BadRequest(new { Message = "Something went wrong. sucker" });
         }
 
 
