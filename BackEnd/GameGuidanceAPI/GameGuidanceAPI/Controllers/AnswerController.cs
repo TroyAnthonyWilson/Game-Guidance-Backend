@@ -72,8 +72,8 @@ namespace GameGuidanceAPI.Controllers
                 bodybuild.Add($" themes=({answer.Theme}) ");
             }
 
-            var fields = string.Join(" & ", bodybuild);
-            var body = $"fields *; limit 20; where {fields} & category=(0,8,9,11); & status=0 ";
+            string fields = string.Join(" & ", bodybuild);
+            string body = $"fields *; limit 20; where {fields} & category=(0,8,9,11); & status=0 ";
 
             request.AddHeader("Client-ID", "n9kcwb4ynvskjy7bd147jk94tdt6yw");
             request.AddHeader("Authorization", "Bearer 1w3wtuaj6g10l2zttajubqwveonvtf");
@@ -82,7 +82,6 @@ namespace GameGuidanceAPI.Controllers
             request.AddParameter("text/plain", body, ParameterType.RequestBody);
             RestResponse response = client.Execute(request);
             //return body;
-            //return response.Content;
             //return answer;
             return Ok(response.Content);
         }

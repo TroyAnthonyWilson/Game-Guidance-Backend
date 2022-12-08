@@ -11,29 +11,25 @@ namespace GameGuidanceAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserFavoriteController : ControllerBase
+    public class UserIgnoreController : ControllerBase
     {
-
         private readonly GameGuidanceDBContext _authContext;
-        
-        public UserFavoriteController(GameGuidanceDBContext gameGuidanceDBContext)
+
+        public UserIgnoreController(GameGuidanceDBContext gameGuidanceDBContext)
         {
             _authContext = gameGuidanceDBContext;
         }
 
-
-        
-        [HttpPost("addfavorite")]
+        [HttpPost("addignore")]
         public async Task<IActionResult> Post(int gameId)
         {
             var authHeader = Request.Headers["Authorization"];
             var tokenString = authHeader.ToString().Split(" ")[1];
             User user = _authContext.Users.Where(u => u.Token == tokenString).FirstOrDefault();
-            if(user == null)
+            if (user == null)
             {
                 return Unauthorized();
             }
-
             var client = new RestClient("https://api.igdb.com/v4/games");
             RestClientOptions options = new RestClientOptions("https://api.igdb.com/v4/games")
             {
@@ -56,7 +52,7 @@ namespace GameGuidanceAPI.Controllers
                 {
                     JsonDeserializer myGame = myDeserializedClass[0];
 
-                    UserFavorite userFavorite = new()
+                    UserIgnore userIgnore = new()
                     {
                         UserId = user.Id,
                         GameId = myGame.id.Value,
@@ -64,35 +60,34 @@ namespace GameGuidanceAPI.Controllers
                         Summary = myGame.summary,
                     };
 
-                    if (await CheckUserAlreadyFavoritedAsync(userFavorite.UserId, userFavorite.GameId))
-                        return Ok(new { message = "Favorite Already Exists!" });
+                    if (await CheckUserAlreadyIgnoredAsync(userIgnore.UserId, userIgnore.GameId))
+                        return Ok(new { message = "Ignore Already Exists!" });
 
-                    await _authContext.UserFavorites.AddAsync(userFavorite);
+                    await _authContext.UserIgnores.AddAsync(userIgnore);
                     await _authContext.SaveChangesAsync();
 
-                    return Ok(new { Message = $"{myGame.name} added to favorites." });
+                    return Ok(new { Message = $"{myGame.name} added to ignore list." });
                 }
             }
-            return BadRequest(new { Message = "Something went wrong. sucker" });
+            return BadRequest();
         }
 
-
-        //remove user favorite
-        [HttpDelete("removefavorite")]
+        //remove user ignore
+        [HttpDelete("removeignore")]
         public async Task<IActionResult> Delete(int gameId)
         {
             var authHeader = Request.Headers["Authorization"];
             var tokenString = authHeader.ToString().Split(" ")[1];
             User user = _authContext.Users.Where(u => u.Token == tokenString).FirstOrDefault();
-            if(user == null)
+            if (user == null)
             {
                 return Unauthorized();
             }
 
-            if(await CheckUserAlreadyFavoritedAsync(user.Id, gameId))
+            if (await CheckUserAlreadyIgnoredAsync(user.Id, gameId))
             {
-                UserFavorite userFavorite = await _authContext.UserFavorites.Where(u => u.UserId == user.Id && u.GameId == gameId).FirstOrDefaultAsync();
-                _authContext.UserFavorites.Remove(userFavorite);
+                UserIgnore userIgnore = await _authContext.UserIgnores.Where(u => u.UserId == user.Id && u.GameId == gameId).FirstOrDefaultAsync();
+                _authContext.UserIgnores.Remove(userIgnore);
                 await _authContext.SaveChangesAsync();
                 return Ok(new { Message = "Favorite Removed!" });
             }
@@ -100,47 +95,23 @@ namespace GameGuidanceAPI.Controllers
         }
 
 
-
-        [HttpGet("getfavorites")]
+        //get ignores
+        [HttpGet("getignores")]
         public async Task<IActionResult> Get()
         {
             var authHeader = Request.Headers["Authorization"];
             var tokenString = authHeader.ToString().Split(" ")[1];
             User user = _authContext.Users.Where(u => u.Token == tokenString).FirstOrDefault();
-            if(user == null)
+            if (user == null)
             {
                 return Unauthorized();
             }
 
-            var userFavorites = await _authContext.UserFavorites.Where(u => u.UserId == user.Id).ToListAsync();
-            return Ok(userFavorites);
+            List<UserIgnore> userIgnores = await _authContext.UserIgnores.Where(u => u.UserId == user.Id).ToListAsync();
+            return Ok(userIgnores);
         }
 
-        //update rating
-        [HttpPut("updaterating")]
-        public async Task<IActionResult> Put(int gameId, int rating)
-        {
-            var authHeader = Request.Headers["Authorization"];
-            var tokenString = authHeader.ToString().Split(" ")[1];
-            User user = _authContext.Users.Where(u => u.Token == tokenString).FirstOrDefault();
-            if(user == null)
-            {
-                return Unauthorized();
-            }
-            if(await CheckUserAlreadyFavoritedAsync(user.Id, gameId))
-            {
-                UserFavorite userFavorite = await _authContext.UserFavorites.Where(u => u.UserId == user.Id && u.GameId == gameId).FirstOrDefaultAsync();
-                userFavorite.Rating = rating;
-                await _authContext.SaveChangesAsync();
-                return Ok(new { Message = "Rating Updated!" });
-            }
-            return BadRequest();
-        }
-
-
-
-
-        private async Task<bool> CheckUserAlreadyFavoritedAsync(int userId, int gameId)
-           => await _authContext.UserFavorites.AnyAsync(x => x.UserId == userId && x.GameId == gameId);
+        private async Task<bool> CheckUserAlreadyIgnoredAsync(int userId, int gameId)
+          => await _authContext.UserIgnores.AnyAsync(x => x.UserId == userId && x.GameId == gameId);
     }
 }

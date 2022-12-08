@@ -17,10 +17,10 @@ namespace GameGuidanceAPI.Context
         public DbSet<Genre> Genres { get; set; }
         public DbSet<PlayerPerspective> PlayerPerspectives { get; set; }
         public DbSet<Theme> Themes { get; set; }
-        // question model
         public DbSet<Question> Questions { get; set; }
         public DbSet<Choice> Choices { get; set; }
         public DbSet<Answer> Answers { get; set; }
+        public DbSet<UserIgnore> UserIgnores { get; set; }
 
 
 
@@ -37,6 +37,7 @@ namespace GameGuidanceAPI.Context
             modelBuilder.Entity<Question>().ToTable("questions");
             modelBuilder.Entity<Choice>().ToTable("choices");
             modelBuilder.Entity<Answer>().ToTable("answers");
+            modelBuilder.Entity<UserIgnore>().ToTable("userIgnores");
         }
     }
 }
