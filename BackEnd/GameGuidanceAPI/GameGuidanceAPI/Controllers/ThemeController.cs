@@ -13,8 +13,8 @@ namespace GameGuidanceAPI.Controllers
     public class ThemeController : ControllerBase
     {
         private readonly GameGuidanceDBContext _authContext;
-        private string clientId = Helpers.IgdbTokens.getClientID();
-        private string bearer = Helpers.IgdbTokens.getBearer();
+        private string clientId = Helpers.IgdbTokens.GetClientID();
+        private string bearer = Helpers.IgdbTokens.GetBearer();
 
         public ThemeController(GameGuidanceDBContext gameGuidanceDBContext)
         {

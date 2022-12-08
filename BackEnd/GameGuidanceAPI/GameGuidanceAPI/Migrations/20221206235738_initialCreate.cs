@@ -5,7 +5,7 @@
 namespace GameGuidanceAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class game1 : Migration
+    public partial class initialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -88,7 +88,7 @@ namespace GameGuidanceAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    QuestionName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    QuestionName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

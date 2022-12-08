@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using RestSharp;
+using static GameGuidanceAPI.Helpers.IgdbTokens;
 
 namespace GameGuidanceAPI.Controllers
 {
@@ -14,10 +15,6 @@ namespace GameGuidanceAPI.Controllers
     {
 
         private readonly GameGuidanceDBContext _authContext;
-        private readonly string clientId = Helpers.IgdbTokens.getClientID();
-        private readonly string bearer = Helpers.IgdbTokens.getBearer();
-
-
         
         public UserFavoriteController(GameGuidanceDBContext gameGuidanceDBContext)
         {
@@ -44,8 +41,8 @@ namespace GameGuidanceAPI.Controllers
                 MaxTimeout = -1
             };
             var request = new RestRequest("https://api.igdb.com/v4/games", Method.Post);
-            request.AddHeader("Client-ID", clientId);
-            request.AddHeader("Authorization", bearer);
+            request.AddHeader("Client-ID", GetClientID());
+            request.AddHeader("Authorization", GetBearer());
             request.AddHeader("Content-Type", "text/plain");
             var body = $"fields *;where id = {gameId};";
             request.AddParameter("text/plain", body, ParameterType.RequestBody);

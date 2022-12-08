@@ -1,14 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Models;
+﻿using GameGuidanceAPI.Context;
 using GameGuidanceAPI.Models;
-using RestSharp;
-using GameGuidanceAPI.Helpers;
-using GameGuidanceAPI.Context;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Net.Sockets;
-using GameGuidanceAPI.Models.IGDB;
+using RestSharp;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -21,8 +15,6 @@ namespace GameGuidanceAPI.Controllers
     {
 
         private readonly GameGuidanceDBContext _authContext;
-        private string clientId = Helpers.IgdbTokens.getClientID();
-        private string bearer = Helpers.IgdbTokens.getBearer();
 
         public AnswerController(GameGuidanceDBContext gameGuidanceDBContext)
         {
@@ -30,20 +22,72 @@ namespace GameGuidanceAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Answer>> PostAnswer(int platform, int gameMode, int playerPerpective, int genre, int theme)
+        public async Task<ActionResult<Answer>> PostAnswer([FromBody] Answer answerObj)
         {
             var newAnswer = new Answer
             {
-                Platform = platform,
-                GameMode = gameMode,
-                PlayerPerspective = playerPerpective,
-                Genre = genre,
-                Theme = theme,
+                Platform = answerObj.Platform,
+                GameMode = answerObj.GameMode,
+                PlayerPerspective = answerObj.PlayerPerspective,
+                Genre = answerObj.Genre,
+                Theme = answerObj.Theme,
             };
             _authContext.Answers.Add(newAnswer);
             await _authContext.SaveChangesAsync();
             return newAnswer;
         }
+
+        // POST api/<HomeController>
+        [HttpPost("FinalPost")]
+        public async Task<IActionResult> FinalPost([FromBody] Answer answer)
+        {
+            var client = new RestClient("https://api.igdb.com/v4/games");
+            RestClientOptions options = new RestClientOptions("https://api.igdb.com/v4/games")
+            {
+                ThrowOnAnyError = true,
+                MaxTimeout = -1
+            };
+            var request = new RestRequest("https://api.igdb.com/v4/games", Method.Post);
+
+            List<string> bodybuild = new();
+            
+            if (answer.Platform != null)
+            {
+                bodybuild.Add($" platforms = ({answer.Platform}) ");
+            }
+            if (answer.GameMode != null)
+            {
+                bodybuild.Add($" game_modes = ({answer.GameMode}) ");
+            }
+            if (answer.PlayerPerspective != null)
+            {
+                bodybuild.Add($" player_perspectives=({answer.PlayerPerspective}) ");
+            }
+            if (answer.Genre != null)
+            {
+                bodybuild.Add($" genres=({answer.Genre}) ");
+            }
+            if (answer.Theme != null)
+            {
+                bodybuild.Add($" themes=({answer.Theme}) ");
+            }
+
+            var fields = string.Join(" & ", bodybuild);
+            var body = $"fields *; limit 20; where {fields} & category=(0,8,9,11); & status=0 ";
+
+            request.AddHeader("Client-ID", "n9kcwb4ynvskjy7bd147jk94tdt6yw");
+            request.AddHeader("Authorization", "Bearer 1w3wtuaj6g10l2zttajubqwveonvtf");
+            request.AddHeader("Content-Type", "text/plain");
+            //request.AddHeader("Cookie", "__cf_bm=tArho0gINIfLmN3bLfKD9VmJJXO_zA0icrIpJZwzsdE-1669564263-0-AeA4CPYMcXk+VQzXR0z36LHOrx7xkYr8hr49f/zZZ6EaAcL7B2S7ufy5ixCu/2kMQOqyzps9Vmqx9Y+kWCWKPL0=");
+            request.AddParameter("text/plain", body, ParameterType.RequestBody);
+            RestResponse response = client.Execute(request);
+            //return body;
+            //return response.Content;
+            //return answer;
+            return Ok(response.Content);
+        }
+
+
 
         [HttpPost("ChangeAnswer")]
         public async Task<ActionResult<Answer>> ChangeAnswer(Answer answer)
