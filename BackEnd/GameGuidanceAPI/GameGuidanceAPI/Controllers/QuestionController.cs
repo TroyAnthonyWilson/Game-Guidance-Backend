@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using GameGuidanceAPI.Context;
+using GameGuidanceAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using GameGuidanceAPI.Context;
-using GameGuidanceAPI.Models;
 
 namespace GameGuidanceAPI.Controllers
 {
@@ -24,6 +20,7 @@ namespace GameGuidanceAPI.Controllers
         }
 
         [HttpGet("GetAllQuestions")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Question>>> GetAllQuestions()
         {
             if (_context.Questions == null)
@@ -34,6 +31,7 @@ namespace GameGuidanceAPI.Controllers
         }
 
         [HttpGet("GetChoicesToQuestionId/{id}")]
+        [Authorize]
         public List<Choice> GetChoicesToQuestionId(int id)
         {
             var question = _context.Questions.Find(id);
@@ -50,7 +48,7 @@ namespace GameGuidanceAPI.Controllers
 
         private void AddQuestionsToDb()
         {
-            
+
 
 
             if (_context.Questions.Count() == 0)
@@ -72,37 +70,37 @@ namespace GameGuidanceAPI.Controllers
 
                 //question 1
                 int questionId = _context.Questions.FirstOrDefault(q => q.QuestionName == question1).Id;
-          
-                _context.Choices.Add(new Choice { ChoiceName = "PlayStation 2", QuestionId = questionId , ApiChoiceId = 8});
-                _context.Choices.Add(new Choice { ChoiceName = "PC (Microsoft Windows)", QuestionId = questionId , ApiChoiceId = 6});
-                _context.Choices.Add(new Choice { ChoiceName = "Dreamcast", QuestionId = questionId , ApiChoiceId = 23});
-                _context.Choices.Add(new Choice { ChoiceName = "Nintendo Switch", QuestionId = questionId , ApiChoiceId = 130});
-                _context.Choices.Add(new Choice { ChoiceName = "Xbox", QuestionId = questionId , ApiChoiceId = 11});
-                _context.Choices.Add(new Choice { ChoiceName = "Game Boy Advance", QuestionId = questionId , ApiChoiceId = 24});
-                _context.Choices.Add(new Choice { ChoiceName = "Nintendo 64", QuestionId = questionId , ApiChoiceId = 4});
-                _context.Choices.Add(new Choice { ChoiceName = "Wii U'", QuestionId = questionId , ApiChoiceId = 41});
-                _context.Choices.Add(new Choice { ChoiceName = "Web browser", QuestionId = questionId , ApiChoiceId = 82});
-                _context.Choices.Add(new Choice { ChoiceName = "Nintendo Entertainment System", QuestionId = questionId , ApiChoiceId = 18});
-                _context.Choices.Add(new Choice { ChoiceName = "Nintendo 3DS", QuestionId = questionId , ApiChoiceId = 37});
-                _context.Choices.Add(new Choice { ChoiceName = "Game Boy Color", QuestionId = questionId , ApiChoiceId = 22});
-                _context.Choices.Add(new Choice { ChoiceName = "PlayStation Portable", QuestionId = questionId , ApiChoiceId = 38});
-                _context.Choices.Add(new Choice { ChoiceName = "PlayStation 3", QuestionId = questionId , ApiChoiceId = 9 });
-                _context.Choices.Add(new Choice { ChoiceName = "Nintendo DS", QuestionId = questionId , ApiChoiceId = 20 });
-                _context.Choices.Add(new Choice { ChoiceName = "PlayStation 4", QuestionId = questionId , ApiChoiceId = 48 });
-                _context.Choices.Add(new Choice { ChoiceName = "Nintendo GameCube", QuestionId = questionId , ApiChoiceId = 21 });
-                _context.Choices.Add(new Choice { ChoiceName = "Super Nintendo Entertainment System", QuestionId = questionId , ApiChoiceId = 19 });
-                _context.Choices.Add(new Choice { ChoiceName = "New Nintendo 3DS", QuestionId = questionId , ApiChoiceId = 137 });
-                _context.Choices.Add(new Choice { ChoiceName = "Game Boy", QuestionId = questionId , ApiChoiceId = 33 });
-                _context.Choices.Add(new Choice { ChoiceName = "Wii", QuestionId = questionId , ApiChoiceId = 5 });
-                _context.Choices.Add(new Choice { ChoiceName = "PlayStation 5", QuestionId = questionId , ApiChoiceId = 167 });
-                _context.Choices.Add(new Choice { ChoiceName = "Xbox Series X|S", QuestionId = questionId , ApiChoiceId = 169 });
-                _context.Choices.Add(new Choice { ChoiceName = "Xbox 360", QuestionId = questionId , ApiChoiceId = 12 });
+
+                _context.Choices.Add(new Choice { ChoiceName = "PlayStation 2", QuestionId = questionId, ApiChoiceId = 8 });
+                _context.Choices.Add(new Choice { ChoiceName = "PC (Microsoft Windows)", QuestionId = questionId, ApiChoiceId = 6 });
+                _context.Choices.Add(new Choice { ChoiceName = "Dreamcast", QuestionId = questionId, ApiChoiceId = 23 });
+                _context.Choices.Add(new Choice { ChoiceName = "Nintendo Switch", QuestionId = questionId, ApiChoiceId = 130 });
+                _context.Choices.Add(new Choice { ChoiceName = "Xbox", QuestionId = questionId, ApiChoiceId = 11 });
+                _context.Choices.Add(new Choice { ChoiceName = "Game Boy Advance", QuestionId = questionId, ApiChoiceId = 24 });
+                _context.Choices.Add(new Choice { ChoiceName = "Nintendo 64", QuestionId = questionId, ApiChoiceId = 4 });
+                _context.Choices.Add(new Choice { ChoiceName = "Wii U'", QuestionId = questionId, ApiChoiceId = 41 });
+                _context.Choices.Add(new Choice { ChoiceName = "Web browser", QuestionId = questionId, ApiChoiceId = 82 });
+                _context.Choices.Add(new Choice { ChoiceName = "Nintendo Entertainment System", QuestionId = questionId, ApiChoiceId = 18 });
+                _context.Choices.Add(new Choice { ChoiceName = "Nintendo 3DS", QuestionId = questionId, ApiChoiceId = 37 });
+                _context.Choices.Add(new Choice { ChoiceName = "Game Boy Color", QuestionId = questionId, ApiChoiceId = 22 });
+                _context.Choices.Add(new Choice { ChoiceName = "PlayStation Portable", QuestionId = questionId, ApiChoiceId = 38 });
+                _context.Choices.Add(new Choice { ChoiceName = "PlayStation 3", QuestionId = questionId, ApiChoiceId = 9 });
+                _context.Choices.Add(new Choice { ChoiceName = "Nintendo DS", QuestionId = questionId, ApiChoiceId = 20 });
+                _context.Choices.Add(new Choice { ChoiceName = "PlayStation 4", QuestionId = questionId, ApiChoiceId = 48 });
+                _context.Choices.Add(new Choice { ChoiceName = "Nintendo GameCube", QuestionId = questionId, ApiChoiceId = 21 });
+                _context.Choices.Add(new Choice { ChoiceName = "Super Nintendo Entertainment System", QuestionId = questionId, ApiChoiceId = 19 });
+                _context.Choices.Add(new Choice { ChoiceName = "New Nintendo 3DS", QuestionId = questionId, ApiChoiceId = 137 });
+                _context.Choices.Add(new Choice { ChoiceName = "Game Boy", QuestionId = questionId, ApiChoiceId = 33 });
+                _context.Choices.Add(new Choice { ChoiceName = "Wii", QuestionId = questionId, ApiChoiceId = 5 });
+                _context.Choices.Add(new Choice { ChoiceName = "PlayStation 5", QuestionId = questionId, ApiChoiceId = 167 });
+                _context.Choices.Add(new Choice { ChoiceName = "Xbox Series X|S", QuestionId = questionId, ApiChoiceId = 169 });
+                _context.Choices.Add(new Choice { ChoiceName = "Xbox 360", QuestionId = questionId, ApiChoiceId = 12 });
                 _context.Choices.Add(new Choice { ChoiceName = "Xbox One", QuestionId = questionId, ApiChoiceId = 49 });
                 _context.Choices.Add(new Choice { ChoiceName = "PlayStation", QuestionId = questionId, ApiChoiceId = 7 });
-                
+
 
                 //question 2
-        
+
                 questionId = _context.Questions.FirstOrDefault(q => q.QuestionName == question2).Id;
 
                 _context.Choices.Add(new Choice { ChoiceName = "Single player", QuestionId = questionId, ApiChoiceId = 1 });
@@ -111,12 +109,12 @@ namespace GameGuidanceAPI.Controllers
                 _context.Choices.Add(new Choice { ChoiceName = "Split screen", QuestionId = questionId, ApiChoiceId = 4 });
                 _context.Choices.Add(new Choice { ChoiceName = "Massively Multiplayer Online (MMO)", QuestionId = questionId, ApiChoiceId = 5 });
                 _context.Choices.Add(new Choice { ChoiceName = "Battle Royale", QuestionId = questionId, ApiChoiceId = 6 });
-                
+
 
 
                 //question 3
                 questionId = _context.Questions.FirstOrDefault(q => q.QuestionName == question3).Id;
-            
+
                 _context.Choices.Add(new Choice { ChoiceName = "Point-and-click", QuestionId = questionId, ApiChoiceId = 2 });
                 _context.Choices.Add(new Choice { ChoiceName = "Fighting", QuestionId = questionId, ApiChoiceId = 4 });
                 _context.Choices.Add(new Choice { ChoiceName = "Shooter", QuestionId = questionId, ApiChoiceId = 5 });
@@ -135,7 +133,7 @@ namespace GameGuidanceAPI.Controllers
                 _context.Choices.Add(new Choice { ChoiceName = "Quiz/Trivia", QuestionId = questionId, ApiChoiceId = 26 });
                 _context.Choices.Add(new Choice { ChoiceName = "Pinball", QuestionId = questionId, ApiChoiceId = 30 });
                 _context.Choices.Add(new Choice { ChoiceName = "Adventure", QuestionId = questionId, ApiChoiceId = 31 });
-                _context.Choices.Add(new Choice { ChoiceName = "Indie", QuestionId = questionId, ApiChoiceId = 32 });                
+                _context.Choices.Add(new Choice { ChoiceName = "Indie", QuestionId = questionId, ApiChoiceId = 32 });
                 _context.Choices.Add(new Choice { ChoiceName = "Arcade", QuestionId = questionId, ApiChoiceId = 33 });
                 _context.Choices.Add(new Choice { ChoiceName = "Visual Novel", QuestionId = questionId, ApiChoiceId = 34 });
                 _context.Choices.Add(new Choice { ChoiceName = "Card & Board Game", QuestionId = questionId, ApiChoiceId = 35 });
@@ -181,7 +179,7 @@ namespace GameGuidanceAPI.Controllers
 
                 //question 6
                 questionId = _context.Questions.FirstOrDefault(q => q.QuestionName == question6).Id;
-                
+
                 _context.Choices.Add(new Choice { ChoiceName = ">=50", QuestionId = questionId, ApiChoiceId = 0 });
                 _context.Choices.Add(new Choice { ChoiceName = ">=60", QuestionId = questionId, ApiChoiceId = 0 });
                 _context.Choices.Add(new Choice { ChoiceName = ">=70", QuestionId = questionId, ApiChoiceId = 0 });

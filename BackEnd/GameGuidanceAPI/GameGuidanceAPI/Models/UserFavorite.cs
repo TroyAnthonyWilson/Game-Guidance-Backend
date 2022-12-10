@@ -22,9 +22,5 @@ namespace GameGuidanceAPI.Models
         public string? Summary { get; set; }
 
         public int? Rating { get; set; }
-
-        //public virtual Game? Game { get; set; }
-
-        //public virtual User? User { get; set; }
     }
 }
