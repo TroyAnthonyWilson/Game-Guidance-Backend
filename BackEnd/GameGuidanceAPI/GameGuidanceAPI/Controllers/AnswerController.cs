@@ -21,23 +21,25 @@ namespace GameGuidanceAPI.Controllers
             _authContext = gameGuidanceDBContext;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Answer>> PostAnswer([FromBody] Answer answerObj)
-        {
-            var newAnswer = new Answer
-            {
-                Platform = answerObj.Platform,
-                GameMode = answerObj.GameMode,
-                PlayerPerspective = answerObj.PlayerPerspective,
-                Genre = answerObj.Genre,
-                Theme = answerObj.Theme,
-            };
-            _authContext.Answers.Add(newAnswer);
-            await _authContext.SaveChangesAsync();
-            return newAnswer;
-        }
+        //[HttpPost]
+        //public async Task<ActionResult<Answer>> PostAnswer([FromBody] Answer answerObj)
+        //{
+        //    var newAnswer = new Answer
+        //    {
+        //        Platform = answerObj.Platform,
+        //        GameMode = answerObj.GameMode,
+        //        PlayerPerspective = answerObj.PlayerPerspective,
+        //        Genre = answerObj.Genre,
+        //        Theme = answerObj.Theme,
+        //    };
+        //    _authContext.Answers.Add(newAnswer);
+        //    await _authContext.SaveChangesAsync();
+        //    return newAnswer;
+        //}
 
         // POST api/<HomeController>
+
+
         [HttpPost("FinalPost")]
         public async Task<IActionResult> FinalPost([FromBody] Answer answer)
         {
@@ -88,56 +90,57 @@ namespace GameGuidanceAPI.Controllers
 
 
 
-        [HttpPost("ChangeAnswer")]
-        public async Task<ActionResult<Answer>> ChangeAnswer(Answer answer)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest("Not a valid model");
+        //[HttpPost("ChangeAnswer")]
+        //public async Task<ActionResult<Answer>> ChangeAnswer(Answer answer)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return BadRequest("Not a valid model");
 
-            {
-                var existingAnswer = _authContext.Answers.FirstOrDefault();
+        //    {
+        //        var existingAnswer = _authContext.Answers.FirstOrDefault();
 
-                if (existingAnswer != null)
-                {
-                    existingAnswer.Platform = answer.Platform;
-                    existingAnswer.GameMode = answer.GameMode;
-                    existingAnswer.PlayerPerspective = answer.PlayerPerspective;
-                    existingAnswer.Genre = answer.Genre;
-                    existingAnswer.Theme = answer.Theme;
-                    _authContext.SaveChanges();
-                }
-                else
-                {
-                    return NotFound();
-                }
-            }
+        //        if (existingAnswer != null)
+        //        {
+        //            existingAnswer.Platform = answer.Platform;
+        //            existingAnswer.GameMode = answer.GameMode;
+        //            existingAnswer.PlayerPerspective = answer.PlayerPerspective;
+        //            existingAnswer.Genre = answer.Genre;
+        //            existingAnswer.Theme = answer.Theme;
+        //            _authContext.SaveChanges();
+        //        }
+        //        else
+        //        {
+        //            return NotFound();
+        //        }
+        //    }
 
-            return Ok();
-        }
-        // DELETE: api/Question/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAnswer(int id)
-        {
-            if (_authContext.Answers == null)
-            {
-                return NotFound();
-            }
-            var answer = await _authContext.Answers.FindAsync(id);
-            if (answer == null)
-            {
-                return NotFound();
-            }
+        //    return Ok();
+        //}
 
-            _authContext.Answers.Remove(answer);
-            await _authContext.SaveChangesAsync();
+        //// DELETE: api/Question/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteAnswer(int id)
+        //{
+        //    if (_authContext.Answers == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var answer = await _authContext.Answers.FindAsync(id);
+        //    if (answer == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return NoContent();
-        }
+        //    _authContext.Answers.Remove(answer);
+        //    await _authContext.SaveChangesAsync();
 
-        [HttpGet("GetAnswers")]
-        public async Task<ActionResult<Answer>> GetAnswers()
-        {
-            return Ok(await _authContext.Answers.ToListAsync());
-        }
+        //    return NoContent();
+        //}
+
+        //[HttpGet("GetAnswers")]
+        //public async Task<ActionResult<Answer>> GetAnswers()
+        //{
+        //    return Ok(await _authContext.Answers.ToListAsync());
+        //}
     }
 }
