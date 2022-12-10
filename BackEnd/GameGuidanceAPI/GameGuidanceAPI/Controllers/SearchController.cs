@@ -1,7 +1,7 @@
-﻿using GameGuidanceAPI.Context;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
+using static GameGuidanceAPI.Helpers.IgdbTokens;
 
 namespace GameGuidanceAPI.Controllers
 {
@@ -10,24 +10,20 @@ namespace GameGuidanceAPI.Controllers
     public class SearchController : ControllerBase
     {
 
-        private readonly string clientId = Helpers.IgdbTokens.GetClientID();
-        private readonly string bearer = Helpers.IgdbTokens.GetBearer();
-
-
-        
         [HttpGet("search")]
+        [Authorize]
         public async Task<IActionResult> Get(string search)
         {
 
-            var client = new RestClient("https://api.igdb.com/v4/games");
-            RestClientOptions options = new RestClientOptions("https://api.igdb.com/v4/games")
+            var client = new RestClient(GetBaseUrl());
+            RestClientOptions options = new RestClientOptions(GetBaseUrl())
             {
                 ThrowOnAnyError = true,
                 MaxTimeout = -1
             };
-            var request = new RestRequest("https://api.igdb.com/v4/games", Method.Post);
-            request.AddHeader("Client-ID", clientId);
-            request.AddHeader("Authorization", bearer);
+            var request = new RestRequest(GetBaseUrl(), Method.Post);
+            request.AddHeader("Client-ID", GetClientID());
+            request.AddHeader("Authorization", GetBearer());
             request.AddHeader("Content-Type", "text/plain");
             var body = $"fields *;search \"{search}\";limit 50;";
             request.AddParameter("text/plain", body, ParameterType.RequestBody);

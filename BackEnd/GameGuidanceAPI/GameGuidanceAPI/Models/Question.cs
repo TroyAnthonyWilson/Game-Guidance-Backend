@@ -10,6 +10,7 @@ namespace GameGuidanceAPI.Models
         public int Id { get; set; }
 
         [Required]
+        [MaxLength(200)]
         public string? QuestionName { get; set; }
 
     }

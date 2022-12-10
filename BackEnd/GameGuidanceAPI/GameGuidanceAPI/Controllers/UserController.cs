@@ -1,7 +1,6 @@
 ﻿using GameGuidanceAPI.Context;
 using GameGuidanceAPI.Helpers;
 using GameGuidanceAPI.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -15,26 +14,26 @@ namespace GameGuidanceAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+
         private readonly GameGuidanceDBContext _authContext;
         public UserController(GameGuidanceDBContext gameGuidanceDBContext)
         {
             _authContext = gameGuidanceDBContext;
         }
 
-
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] User userObj)
         {
 
-            if(userObj == null)
+            if (userObj == null)
                 return BadRequest();
 
             var user = await _authContext.Users.FirstOrDefaultAsync(x => x.UserName == userObj.UserName);
 
-            if(user == null)
+            if (user == null)
                 return NotFound(new { Message = "User Not Found!" });
 
-            if(!PasswordHasher.VarifyPassword(userObj.Password, user.Password))
+            if (!PasswordHasher.VarifyPassword(userObj.Password, user.Password))
             {
                 return BadRequest(new { Message = "Password is Incorrect" });
             }
@@ -53,10 +52,10 @@ namespace GameGuidanceAPI.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] User userObj)
         {
-            if(userObj == null)
+            if (userObj == null)
                 return BadRequest();
 
-            if(await CheckUserNameExistAsync(userObj.UserName))
+            if (await CheckUserNameExistAsync(userObj.UserName))
                 return BadRequest(new { message = "Username Already Exists!" });
 
             userObj.Password = PasswordHasher.HashPassword(userObj.Password);
@@ -70,13 +69,14 @@ namespace GameGuidanceAPI.Controllers
             => await _authContext.Users.AnyAsync(x => x.UserName == userName);
 
 
+
+
         private static string CreateJwt(User user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes("veryverysceret.....");
             var identity = new ClaimsIdentity(new Claim[]
             {
-                //new Claim(ClaimTypes.Role, "user"),
                 new Claim(ClaimTypes.Name, user.UserName)
             });
 
@@ -93,40 +93,5 @@ namespace GameGuidanceAPI.Controllers
 
             return jwtTokenHandler.WriteToken(token);
         }
-
-
-        //code for testing
-        //[Authorize]
-        //[HttpGet]
-        //public async Task<ActionResult<User>> GetAllUsers()
-        //{
-        //    return Ok(await _authContext.Users.ToListAsync());
-        //}
-
-        [Authorize]
-        [HttpPost("UserData")]
-        public async Task<IActionResult> UserData()
-        {
-            //User? user = checkUser(Request.Headers["Authorization"]);
-            
-            Microsoft.Extensions.Primitives.StringValues authHeader = Request.Headers["Authorization"];
-            string tokenString = authHeader.ToString().Split(" ")[1];
-
-            User? user = await _authContext.Users.FirstOrDefaultAsync(u => u.Token == tokenString);
-
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-            return Ok(new { Message = user.UserName });
-        }
-
-        //private async Task<User> checkUser(Microsoft.Extensions.Primitives.StringValues request)
-        //{
-        //    var authHeader = request;
-        //    string tokenString = authHeader.ToString().Split(" ")[1];
-
-        //    return await _authContext.Users.FirstOrDefaultAsync(u => u.Token == tokenString);
-        //}
     }
 }

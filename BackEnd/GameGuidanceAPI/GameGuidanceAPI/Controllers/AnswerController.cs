@@ -1,11 +1,11 @@
 ﻿using GameGuidanceAPI.Context;
 using GameGuidanceAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using RestSharp;
+using static GameGuidanceAPI.Helpers.IgdbTokens;
 
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GameGuidanceAPI.Controllers
 {
@@ -20,6 +20,48 @@ namespace GameGuidanceAPI.Controllers
         {
             _authContext = gameGuidanceDBContext;
         }
+
+        [HttpPost("FinalPost")]
+        [Authorize]
+        public async Task<IActionResult> FinalPost([FromBody] Answer answer)
+        {
+            var client = new RestClient(GetBaseUrl());
+            RestClientOptions options = new RestClientOptions(GetBaseUrl())
+            {
+                ThrowOnAnyError = true,
+                MaxTimeout = -1
+            };
+            var request = new RestRequest(GetBaseUrl(), Method.Post);
+
+            List<string> bodybuild = new();
+
+            if (answer.Platform != null)
+                bodybuild.Add($" platforms = ({answer.Platform}) ");
+
+            if (answer.GameMode != null)
+                bodybuild.Add($" game_modes = ({answer.GameMode}) ");
+
+            if (answer.PlayerPerspective != null)
+                bodybuild.Add($" player_perspectives=({answer.PlayerPerspective}) ");
+
+            if (answer.Genre != null)
+                bodybuild.Add($" genres=({answer.Genre}) ");
+
+            if (answer.Theme != null)
+                bodybuild.Add($" themes=({answer.Theme}) ");
+
+            string fields = string.Join(" & ", bodybuild);
+            string body = $"fields *; limit 20; where {fields} & category=(0,8,9,11); & status=0 ";
+
+            request.AddHeader("Client-ID", GetClientID());
+            request.AddHeader("Authorization", GetBearer());
+            request.AddHeader("Content-Type", "text/plain");
+            request.AddParameter("text/plain", body, ParameterType.RequestBody);
+            RestResponse response = client.Execute(request);
+            return Ok(response.Content);
+        }
+
+
 
         //[HttpPost]
         //public async Task<ActionResult<Answer>> PostAnswer([FromBody] Answer answerObj)
@@ -38,57 +80,6 @@ namespace GameGuidanceAPI.Controllers
         //}
 
         // POST api/<HomeController>
-
-
-        [HttpPost("FinalPost")]
-        public async Task<IActionResult> FinalPost([FromBody] Answer answer)
-        {
-            var client = new RestClient("https://api.igdb.com/v4/games");
-            RestClientOptions options = new RestClientOptions("https://api.igdb.com/v4/games")
-            {
-                ThrowOnAnyError = true,
-                MaxTimeout = -1
-            };
-            var request = new RestRequest("https://api.igdb.com/v4/games", Method.Post);
-
-            List<string> bodybuild = new();
-            
-            if (answer.Platform != null)
-            {
-                bodybuild.Add($" platforms = ({answer.Platform}) ");
-            }
-            if (answer.GameMode != null)
-            {
-                bodybuild.Add($" game_modes = ({answer.GameMode}) ");
-            }
-            if (answer.PlayerPerspective != null)
-            {
-                bodybuild.Add($" player_perspectives=({answer.PlayerPerspective}) ");
-            }
-            if (answer.Genre != null)
-            {
-                bodybuild.Add($" genres=({answer.Genre}) ");
-            }
-            if (answer.Theme != null)
-            {
-                bodybuild.Add($" themes=({answer.Theme}) ");
-            }
-
-            string fields = string.Join(" & ", bodybuild);
-            string body = $"fields *; limit 20; where {fields} & category=(0,8,9,11); & status=0 ";
-
-            request.AddHeader("Client-ID", "n9kcwb4ynvskjy7bd147jk94tdt6yw");
-            request.AddHeader("Authorization", "Bearer 1w3wtuaj6g10l2zttajubqwveonvtf");
-            request.AddHeader("Content-Type", "text/plain");
-            //request.AddHeader("Cookie", "__cf_bm=tArho0gINIfLmN3bLfKD9VmJJXO_zA0icrIpJZwzsdE-1669564263-0-AeA4CPYMcXk+VQzXR0z36LHOrx7xkYr8hr49f/zZZ6EaAcL7B2S7ufy5ixCu/2kMQOqyzps9Vmqx9Y+kWCWKPL0=");
-            request.AddParameter("text/plain", body, ParameterType.RequestBody);
-            RestResponse response = client.Execute(request);
-            //return body;
-            //return answer;
-            return Ok(response.Content);
-        }
-
-
 
         //[HttpPost("ChangeAnswer")]
         //public async Task<ActionResult<Answer>> ChangeAnswer(Answer answer)

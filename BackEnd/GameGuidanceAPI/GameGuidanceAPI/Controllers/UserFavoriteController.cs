@@ -1,6 +1,6 @@
 ﻿using GameGuidanceAPI.Context;
 using GameGuidanceAPI.Models;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -15,32 +15,33 @@ namespace GameGuidanceAPI.Controllers
     {
 
         private readonly GameGuidanceDBContext _authContext;
-        
+
         public UserFavoriteController(GameGuidanceDBContext gameGuidanceDBContext)
         {
             _authContext = gameGuidanceDBContext;
         }
 
 
-        
+
         [HttpPost("addfavorite")]
+        [Authorize]
         public async Task<IActionResult> Post(int gameId)
         {
             var authHeader = Request.Headers["Authorization"];
             var tokenString = authHeader.ToString().Split(" ")[1];
             User user = _authContext.Users.Where(u => u.Token == tokenString).FirstOrDefault();
-            if(user == null)
+            if (user == null)
             {
                 return Unauthorized();
             }
 
-            var client = new RestClient("https://api.igdb.com/v4/games");
-            RestClientOptions options = new RestClientOptions("https://api.igdb.com/v4/games")
+            var client = new RestClient(GetBaseUrl());
+            RestClientOptions options = new RestClientOptions(GetBaseUrl())
             {
                 ThrowOnAnyError = true,
                 MaxTimeout = -1
             };
-            var request = new RestRequest("https://api.igdb.com/v4/games", Method.Post);
+            var request = new RestRequest(GetBaseUrl(), Method.Post);
             request.AddHeader("Client-ID", GetClientID());
             request.AddHeader("Authorization", GetBearer());
             request.AddHeader("Content-Type", "text/plain");
@@ -77,19 +78,19 @@ namespace GameGuidanceAPI.Controllers
         }
 
 
-        //remove user favorite
         [HttpDelete("removefavorite")]
+        [Authorize]
         public async Task<IActionResult> Delete(int gameId)
         {
             var authHeader = Request.Headers["Authorization"];
             var tokenString = authHeader.ToString().Split(" ")[1];
             User user = _authContext.Users.Where(u => u.Token == tokenString).FirstOrDefault();
-            if(user == null)
+            if (user == null)
             {
                 return Unauthorized();
             }
 
-            if(await CheckUserAlreadyFavoritedAsync(user.Id, gameId))
+            if (await CheckUserAlreadyFavoritedAsync(user.Id, gameId))
             {
                 UserFavorite userFavorite = await _authContext.UserFavorites.Where(u => u.UserId == user.Id && u.GameId == gameId).FirstOrDefaultAsync();
                 _authContext.UserFavorites.Remove(userFavorite);
@@ -102,12 +103,13 @@ namespace GameGuidanceAPI.Controllers
 
 
         [HttpGet("getfavorites")]
+        [Authorize]
         public async Task<IActionResult> Get()
         {
             var authHeader = Request.Headers["Authorization"];
             var tokenString = authHeader.ToString().Split(" ")[1];
             User user = _authContext.Users.Where(u => u.Token == tokenString).FirstOrDefault();
-            if(user == null)
+            if (user == null)
             {
                 return Unauthorized();
             }
@@ -116,18 +118,18 @@ namespace GameGuidanceAPI.Controllers
             return Ok(userFavorites);
         }
 
-        //update rating
         [HttpPut("updaterating")]
+        [Authorize]
         public async Task<IActionResult> Put(int gameId, int rating)
         {
             var authHeader = Request.Headers["Authorization"];
             var tokenString = authHeader.ToString().Split(" ")[1];
             User user = _authContext.Users.Where(u => u.Token == tokenString).FirstOrDefault();
-            if(user == null)
+            if (user == null)
             {
                 return Unauthorized();
             }
-            if(await CheckUserAlreadyFavoritedAsync(user.Id, gameId))
+            if (await CheckUserAlreadyFavoritedAsync(user.Id, gameId))
             {
                 UserFavorite userFavorite = await _authContext.UserFavorites.Where(u => u.UserId == user.Id && u.GameId == gameId).FirstOrDefaultAsync();
                 userFavorite.Rating = rating;
@@ -136,8 +138,6 @@ namespace GameGuidanceAPI.Controllers
             }
             return BadRequest();
         }
-
-
 
 
         private async Task<bool> CheckUserAlreadyFavoritedAsync(int userId, int gameId)

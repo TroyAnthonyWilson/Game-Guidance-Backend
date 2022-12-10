@@ -1,6 +1,6 @@
 ﻿using GameGuidanceAPI.Context;
 using GameGuidanceAPI.Models;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -21,6 +21,7 @@ namespace GameGuidanceAPI.Controllers
         }
 
         [HttpPost("addignore")]
+        [Authorize]
         public async Task<IActionResult> Post(int gameId)
         {
             var authHeader = Request.Headers["Authorization"];
@@ -30,13 +31,13 @@ namespace GameGuidanceAPI.Controllers
             {
                 return Unauthorized();
             }
-            var client = new RestClient("https://api.igdb.com/v4/games");
-            RestClientOptions options = new RestClientOptions("https://api.igdb.com/v4/games")
+            var client = new RestClient(GetBaseUrl());
+            RestClientOptions options = new RestClientOptions(GetBaseUrl())
             {
                 ThrowOnAnyError = true,
                 MaxTimeout = -1
             };
-            var request = new RestRequest("https://api.igdb.com/v4/games", Method.Post);
+            var request = new RestRequest(GetBaseUrl(), Method.Post);
             request.AddHeader("Client-ID", GetClientID());
             request.AddHeader("Authorization", GetBearer());
             request.AddHeader("Content-Type", "text/plain");
@@ -72,8 +73,8 @@ namespace GameGuidanceAPI.Controllers
             return BadRequest();
         }
 
-        //remove user ignore
         [HttpDelete("removeignore")]
+        [Authorize]
         public async Task<IActionResult> Delete(int gameId)
         {
             var authHeader = Request.Headers["Authorization"];
@@ -95,8 +96,8 @@ namespace GameGuidanceAPI.Controllers
         }
 
 
-        //get ignores
         [HttpGet("getignores")]
+        [Authorize]
         public async Task<IActionResult> Get()
         {
             var authHeader = Request.Headers["Authorization"];

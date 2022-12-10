@@ -20,6 +20,7 @@ namespace GameGuidanceAPI.Models
         public virtual Question? Question { get; set; }
         
         [Required]
+        [MaxLength(200)]
         public string ChoiceName { get; set; }
 
     }

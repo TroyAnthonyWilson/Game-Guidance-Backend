@@ -20,6 +20,6 @@ namespace GameGuidanceAPI.Models
         [MaxLength(2000)]
         public string? Summary { get; set; }
 
-        public int? Rating { get; set; }
+        //public int? Rating { get; set; }
     }
 }
