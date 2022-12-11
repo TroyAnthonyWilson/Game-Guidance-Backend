@@ -49,8 +49,6 @@ namespace GameGuidanceAPI.Controllers
         private void AddQuestionsToDb()
         {
 
-
-
             if (_context.Questions.Count() == 0)
             {
                 _context.Questions.Add(new Question { QuestionName = question1 });
@@ -185,8 +183,6 @@ namespace GameGuidanceAPI.Controllers
                 _context.Choices.Add(new Choice { ChoiceName = ">=70", QuestionId = questionId, ApiChoiceId = 0 });
                 _context.Choices.Add(new Choice { ChoiceName = ">=80", QuestionId = questionId, ApiChoiceId = 0 });
                 _context.Choices.Add(new Choice { ChoiceName = ">=90", QuestionId = questionId, ApiChoiceId = 0 });
-
-
 
                 _context.SaveChanges();
             }
