@@ -178,11 +178,11 @@ namespace GameGuidanceAPI.Controllers
                 //question 6
                 questionId = _context.Questions.FirstOrDefault(q => q.QuestionName == question6).Id;
 
-                _context.Choices.Add(new Choice { ChoiceName = ">=50", QuestionId = questionId, ApiChoiceId = 0 });
-                _context.Choices.Add(new Choice { ChoiceName = ">=60", QuestionId = questionId, ApiChoiceId = 0 });
-                _context.Choices.Add(new Choice { ChoiceName = ">=70", QuestionId = questionId, ApiChoiceId = 0 });
-                _context.Choices.Add(new Choice { ChoiceName = ">=80", QuestionId = questionId, ApiChoiceId = 0 });
-                _context.Choices.Add(new Choice { ChoiceName = ">=90", QuestionId = questionId, ApiChoiceId = 0 });
+                _context.Choices.Add(new Choice { ChoiceName = ">=50", QuestionId = questionId, ApiChoiceId = 50 });
+                _context.Choices.Add(new Choice { ChoiceName = ">=60", QuestionId = questionId, ApiChoiceId = 60 });
+                _context.Choices.Add(new Choice { ChoiceName = ">=70", QuestionId = questionId, ApiChoiceId = 70 });
+                _context.Choices.Add(new Choice { ChoiceName = ">=80", QuestionId = questionId, ApiChoiceId = 80 });
+                _context.Choices.Add(new Choice { ChoiceName = ">=90", QuestionId = questionId, ApiChoiceId = 90 });
 
                 _context.SaveChanges();
             }

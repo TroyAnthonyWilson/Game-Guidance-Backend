@@ -14,5 +14,7 @@ namespace GameGuidanceAPI.Models
         public int? PlayerPerspective { get; set; }
         public int? Genre { get; set; }
         public int? Theme { get; set; }
+        public double? Rating { get; set; }
+        
     }
 }
