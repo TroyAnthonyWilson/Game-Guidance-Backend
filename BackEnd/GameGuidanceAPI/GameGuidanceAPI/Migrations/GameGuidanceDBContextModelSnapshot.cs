@@ -22,34 +22,6 @@ namespace GameGuidanceAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("GameGuidanceAPI.Models.Answer", b =>
-                {
-                    b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
-
-                    b.Property<int?>("GameMode")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Genre")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Platform")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PlayerPerspective")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Theme")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("answers", (string)null);
-                });
-
             modelBuilder.Entity("GameGuidanceAPI.Models.Choice", b =>
                 {
                     b.Property<int>("Id")
@@ -63,7 +35,8 @@ namespace GameGuidanceAPI.Migrations
 
                     b.Property<string>("ChoiceName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
@@ -73,98 +46,6 @@ namespace GameGuidanceAPI.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("choices", (string)null);
-                });
-
-            modelBuilder.Entity("GameGuidanceAPI.Models.IGDB.Game", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ApiGameId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("games", (string)null);
-                });
-
-            modelBuilder.Entity("GameGuidanceAPI.Models.IGDB.GameMode", b =>
-                {
-                    b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
-
-                    b.Property<int?>("ApiId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("gameModes", (string)null);
-                });
-
-            modelBuilder.Entity("GameGuidanceAPI.Models.IGDB.Genre", b =>
-                {
-                    b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
-
-                    b.Property<int?>("ApiId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("genres", (string)null);
-                });
-
-            modelBuilder.Entity("GameGuidanceAPI.Models.IGDB.PlayerPerspective", b =>
-                {
-                    b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
-
-                    b.Property<int?>("ApiId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("playerPerspectives", (string)null);
-                });
-
-            modelBuilder.Entity("GameGuidanceAPI.Models.IGDB.Theme", b =>
-                {
-                    b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
-
-                    b.Property<int?>("ApiId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("themes", (string)null);
                 });
 
             modelBuilder.Entity("GameGuidanceAPI.Models.Question", b =>
@@ -177,7 +58,8 @@ namespace GameGuidanceAPI.Migrations
 
                     b.Property<string>("QuestionName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
@@ -255,9 +137,6 @@ namespace GameGuidanceAPI.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
-
-                    b.Property<int?>("Rating")
-                        .HasColumnType("int");
 
                     b.Property<string>("Summary")
                         .HasMaxLength(2000)

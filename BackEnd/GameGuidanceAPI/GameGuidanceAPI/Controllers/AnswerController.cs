@@ -42,13 +42,16 @@ namespace GameGuidanceAPI.Controllers
                 bodybuild.Add($" game_modes = ({answer.GameMode}) ");
 
             if (answer.PlayerPerspective != null)
-                bodybuild.Add($" player_perspectives=({answer.PlayerPerspective}) ");
+                bodybuild.Add($" player_perspectives = ({answer.PlayerPerspective}) ");
 
             if (answer.Genre != null)
-                bodybuild.Add($" genres=({answer.Genre}) ");
+                bodybuild.Add($" genres = ({answer.Genre}) ");
 
             if (answer.Theme != null)
-                bodybuild.Add($" themes=({answer.Theme}) ");
+                bodybuild.Add($" themes = ({answer.Theme}) ");
+
+            if (answer.Rating != null)
+                bodybuild.Add($" aggregated_rating > {answer.Rating}");
 
             string fields = string.Join(" & ", bodybuild);
             string body = $"fields *; limit 20; where {fields} & category=(0,8,9,11); & status=0 ";
