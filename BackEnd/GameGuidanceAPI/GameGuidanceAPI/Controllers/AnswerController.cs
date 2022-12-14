@@ -51,10 +51,10 @@ namespace GameGuidanceAPI.Controllers
                 bodybuild.Add($" themes = ({answer.Theme}) ");
 
             if (answer.Rating != null)
-                bodybuild.Add($" aggregated_rating > {answer.Rating}");
+                bodybuild.Add($" rating >= {answer.Rating}");
 
             string fields = string.Join(" & ", bodybuild);
-            string body = $"fields *; limit 20; where {fields} & category=(0,8,9,11); & status=0 ";
+            string body = $"fields *; limit 20; where {fields} & category=(0,8,9,11); sort rating desc;";
 
             request.AddHeader("Client-ID", GetClientID());
             request.AddHeader("Authorization", GetBearer());
@@ -63,78 +63,5 @@ namespace GameGuidanceAPI.Controllers
             RestResponse response = client.Execute(request);
             return Ok(response.Content);
         }
-
-
-
-        //[HttpPost]
-        //public async Task<ActionResult<Answer>> PostAnswer([FromBody] Answer answerObj)
-        //{
-        //    var newAnswer = new Answer
-        //    {
-        //        Platform = answerObj.Platform,
-        //        GameMode = answerObj.GameMode,
-        //        PlayerPerspective = answerObj.PlayerPerspective,
-        //        Genre = answerObj.Genre,
-        //        Theme = answerObj.Theme,
-        //    };
-        //    _authContext.Answers.Add(newAnswer);
-        //    await _authContext.SaveChangesAsync();
-        //    return newAnswer;
-        //}
-
-        // POST api/<HomeController>
-
-        //[HttpPost("ChangeAnswer")]
-        //public async Task<ActionResult<Answer>> ChangeAnswer(Answer answer)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return BadRequest("Not a valid model");
-
-        //    {
-        //        var existingAnswer = _authContext.Answers.FirstOrDefault();
-
-        //        if (existingAnswer != null)
-        //        {
-        //            existingAnswer.Platform = answer.Platform;
-        //            existingAnswer.GameMode = answer.GameMode;
-        //            existingAnswer.PlayerPerspective = answer.PlayerPerspective;
-        //            existingAnswer.Genre = answer.Genre;
-        //            existingAnswer.Theme = answer.Theme;
-        //            _authContext.SaveChanges();
-        //        }
-        //        else
-        //        {
-        //            return NotFound();
-        //        }
-        //    }
-
-        //    return Ok();
-        //}
-
-        //// DELETE: api/Question/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteAnswer(int id)
-        //{
-        //    if (_authContext.Answers == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var answer = await _authContext.Answers.FindAsync(id);
-        //    if (answer == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _authContext.Answers.Remove(answer);
-        //    await _authContext.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        //[HttpGet("GetAnswers")]
-        //public async Task<ActionResult<Answer>> GetAnswers()
-        //{
-        //    return Ok(await _authContext.Answers.ToListAsync());
-        //}
     }
 }

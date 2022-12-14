@@ -15,16 +15,6 @@ namespace GameGuidanceAPI.Context
         public DbSet<Choice> Choices { get; set; }
         public DbSet<UserIgnore> UserIgnores { get; set; }
 
-        //public DbSet<Game> Games { get; set; }
-        //public DbSet<GameMode> GameModes { get; set; }
-        //public DbSet<Genre> Genres { get; set; }
-        //public DbSet<PlayerPerspective> PlayerPerspectives { get; set; }
-        //public DbSet<Theme> Themes { get; set; }
-        //public DbSet<Answer> Answers { get; set; }
-
-
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -33,12 +23,6 @@ namespace GameGuidanceAPI.Context
             modelBuilder.Entity<Question>().ToTable("questions");
             modelBuilder.Entity<Choice>().ToTable("choices");
             modelBuilder.Entity<UserIgnore>().ToTable("userIgnores");
-
-            ////modelBuilder.Entity<GameMode>().ToTable("gameModes");
-            //modelBuilder.Entity<Genre>().ToTable("genres");
-            //modelBuilder.Entity<PlayerPerspective>().ToTable("playerPerspectives");
-            //modelBuilder.Entity<Theme>().ToTable("themes");
-            //modelBuilder.Entity<Answer>().ToTable("answers");
         }
     }
 }
