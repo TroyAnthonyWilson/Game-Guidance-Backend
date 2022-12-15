@@ -9,8 +9,7 @@ using static GameGuidanceAPI.Helpers.IgdbTokens;
 
 namespace GameGuidanceAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Route("api/[controller]"), ApiController]
     public class UserIgnoreController : ControllerBase
     {
         private readonly GameGuidanceDBContext _authContext;
@@ -20,8 +19,7 @@ namespace GameGuidanceAPI.Controllers
             _authContext = gameGuidanceDBContext;
         }
 
-        [HttpPost("addignore")]
-        [Authorize]
+        [HttpPost("addignore"), Authorize]
         public async Task<IActionResult> Post(int gameId)
         {
             var authHeader = Request.Headers["Authorization"];
@@ -32,7 +30,7 @@ namespace GameGuidanceAPI.Controllers
                 return Unauthorized();
             }
             var client = new RestClient(GetBaseUrl());
-            RestClientOptions options = new RestClientOptions(GetBaseUrl())
+            RestClientOptions options = new(GetBaseUrl())
             {
                 ThrowOnAnyError = true,
                 MaxTimeout = -1
@@ -73,8 +71,7 @@ namespace GameGuidanceAPI.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("removeignore")]
-        [Authorize]
+        [HttpDelete("removeignore"), Authorize]
         public async Task<IActionResult> Delete(int gameId)
         {
             var authHeader = Request.Headers["Authorization"];
@@ -95,9 +92,7 @@ namespace GameGuidanceAPI.Controllers
             return BadRequest();
         }
 
-
-        [HttpGet("getignores")]
-        [Authorize]
+        [HttpGet("getignores"), Authorize]
         public async Task<IActionResult> Get()
         {
             var authHeader = Request.Headers["Authorization"];

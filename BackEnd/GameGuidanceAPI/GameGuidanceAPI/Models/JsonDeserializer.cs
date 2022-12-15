@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace GameGuidanceAPI.Models
+﻿namespace GameGuidanceAPI.Models
 {
     // JsonDeserializer myDeserializedClass = JsonConvert.DeserializeObject<List<JsonDeserializer>>(myJsonResponse);
     public class JsonDeserializer
@@ -56,6 +53,4 @@ namespace GameGuidanceAPI.Models
         public int? parent_game { get; set; }
         public List<int>? bundles { get; set; }
     }
-
-
 }

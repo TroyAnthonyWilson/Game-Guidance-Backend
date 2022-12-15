@@ -48,7 +48,6 @@ namespace GameGuidanceAPI.Controllers
             });
         }
 
-
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] User userObj)
         {
@@ -67,9 +66,6 @@ namespace GameGuidanceAPI.Controllers
 
         private async Task<bool> CheckUserNameExistAsync(string userName)
             => await _authContext.Users.AnyAsync(x => x.UserName == userName);
-
-
-
 
         private static string CreateJwt(User user)
         {

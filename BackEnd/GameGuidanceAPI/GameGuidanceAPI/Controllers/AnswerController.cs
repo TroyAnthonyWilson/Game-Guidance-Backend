@@ -1,11 +1,8 @@
-﻿using GameGuidanceAPI.Context;
-using GameGuidanceAPI.Models;
+﻿using GameGuidanceAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 using static GameGuidanceAPI.Helpers.IgdbTokens;
-
-
 
 namespace GameGuidanceAPI.Controllers
 {
@@ -14,15 +11,9 @@ namespace GameGuidanceAPI.Controllers
     public class AnswerController : ControllerBase
     {
 
-        private readonly GameGuidanceDBContext _authContext;
+        public AnswerController() { }
 
-        public AnswerController(GameGuidanceDBContext gameGuidanceDBContext)
-        {
-            _authContext = gameGuidanceDBContext;
-        }
-
-        [HttpPost("FinalPost")]
-        [Authorize]
+        [HttpPost("FinalPost"), Authorize]
         public async Task<IActionResult> FinalPost([FromBody] Answer answer)
         {
             var client = new RestClient(GetBaseUrl());

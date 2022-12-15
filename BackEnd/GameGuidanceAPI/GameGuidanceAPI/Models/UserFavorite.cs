@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-//using GameGuidanceAPI.Models.IGDB;
 
 namespace GameGuidanceAPI.Models
 {

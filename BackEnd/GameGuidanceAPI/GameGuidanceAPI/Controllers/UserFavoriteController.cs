@@ -9,8 +9,7 @@ using static GameGuidanceAPI.Helpers.IgdbTokens;
 
 namespace GameGuidanceAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Route("api/[controller]"), ApiController]
     public class UserFavoriteController : ControllerBase
     {
 
@@ -21,10 +20,7 @@ namespace GameGuidanceAPI.Controllers
             _authContext = gameGuidanceDBContext;
         }
 
-
-
-        [HttpPost("addfavorite")]
-        [Authorize]
+        [HttpPost("addfavorite"), Authorize]
         public async Task<IActionResult> Post(int gameId)
         {
             var authHeader = Request.Headers["Authorization"];
@@ -77,9 +73,7 @@ namespace GameGuidanceAPI.Controllers
             return BadRequest(new { Message = "Something went wrong. sucker" });
         }
 
-
-        [HttpDelete("removefavorite")]
-        [Authorize]
+        [HttpDelete("removefavorite"), Authorize]
         public async Task<IActionResult> Delete(int gameId)
         {
             var authHeader = Request.Headers["Authorization"];
@@ -100,10 +94,7 @@ namespace GameGuidanceAPI.Controllers
             return BadRequest();
         }
 
-
-
-        [HttpGet("getfavorites")]
-        [Authorize]
+        [HttpGet("getfavorites"), Authorize]
         public async Task<IActionResult> Get()
         {
             var authHeader = Request.Headers["Authorization"];
@@ -118,8 +109,7 @@ namespace GameGuidanceAPI.Controllers
             return Ok(userFavorites);
         }
 
-        [HttpPut("updaterating")]
-        [Authorize]
+        [HttpPut("updaterating"), Authorize]
         public async Task<IActionResult> Put(int gameId, int rating)
         {
             var authHeader = Request.Headers["Authorization"];
@@ -138,7 +128,6 @@ namespace GameGuidanceAPI.Controllers
             }
             return BadRequest();
         }
-
 
         private async Task<bool> CheckUserAlreadyFavoritedAsync(int userId, int gameId)
            => await _authContext.UserFavorites.AnyAsync(x => x.UserId == userId && x.GameId == gameId);

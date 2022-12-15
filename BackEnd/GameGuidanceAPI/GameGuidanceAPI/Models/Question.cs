@@ -10,6 +10,5 @@ namespace GameGuidanceAPI.Models
         [Required]
         [MaxLength(200)]
         public string? QuestionName { get; set; }
-
     }
 }
