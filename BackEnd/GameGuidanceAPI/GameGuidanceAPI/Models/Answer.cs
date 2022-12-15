@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace GameGuidanceAPI.Models
 {
@@ -15,6 +12,5 @@ namespace GameGuidanceAPI.Models
         public int? Genre { get; set; }
         public int? Theme { get; set; }
         public double? Rating { get; set; }
-        
     }
 }

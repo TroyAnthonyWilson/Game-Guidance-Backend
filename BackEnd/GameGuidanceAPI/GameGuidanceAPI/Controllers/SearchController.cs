@@ -10,8 +10,7 @@ namespace GameGuidanceAPI.Controllers
     public class SearchController : ControllerBase
     {
 
-        [HttpGet("search")]
-        [Authorize]
+        [HttpGet("search"), Authorize]
         public async Task<IActionResult> Get(string search)
         {
 

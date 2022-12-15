@@ -1,18 +1,12 @@
 using GameGuidanceAPI.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using GameGuidanceAPI.Helpers;
-using GameGuidanceAPI.Controllers;
-
-
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -70,4 +64,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-

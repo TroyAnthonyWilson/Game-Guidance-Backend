@@ -1,5 +1,4 @@
-﻿
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 
 namespace GameGuidanceAPI.Helpers
 {
@@ -36,14 +35,12 @@ namespace GameGuidanceAPI.Helpers
             var key = new Rfc2898DeriveBytes(password, salt, Iterations);
             byte[] hash = key.GetBytes(HashSize);
 
-            for(var i = 0; i < HashSize; i++)
+            for (var i = 0; i < HashSize; i++)
             {
-                if(hashBytes[i + SaltSize] != hash[i])
+                if (hashBytes[i + SaltSize] != hash[i])
                     return false;
             }
             return true;
-
         }
-
     }
 }

@@ -1,5 +1,4 @@
 ﻿using GameGuidanceAPI.Models;
-//sing GameGuidanceAPI.Models.IGDB;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameGuidanceAPI.Context
@@ -7,7 +6,6 @@ namespace GameGuidanceAPI.Context
     public class GameGuidanceDBContext : DbContext
     {
         public GameGuidanceDBContext(DbContextOptions<GameGuidanceDBContext> options) : base(options) { }
-
 
         public DbSet<User> Users { get; set; }
         public DbSet<UserFavorite> UserFavorites { get; set; }
